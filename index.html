@@ -7,805 +7,868 @@
 <title>AgriShift | Erode Farm Climate Advisor</title>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 <style>
-:root{
-  --green:#176b43;
-  --dark:#123c2b;
-  --light:#eef6ef;
-  --gold:#e5b94c;
+:root {
+  --green:#176b45;
+  --dark:#103c2b;
+  --light:#f1f7f1;
+  --gold:#e5a93d;
+  --text:#20352a;
   --muted:#718078;
+  --white:#ffffff;
+  --border:#e2ebe3;
 }
-*{box-sizing:border-box}
-body{
-  margin:0;font-family:Inter,Arial,sans-serif;
-  background:#f5f8f5;color:#20372b;
+* {box-sizing:border-box;margin:0;padding:0}
+body {
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f5f8f5;
+  color:var(--text);
+  line-height:1.6;
 }
-header{
-  background:var(--dark);color:white;padding:17px 5%;
-  display:flex;justify-content:space-between;
-  align-items:center;flex-wrap:wrap;gap:15px;
+button,input,select {font:inherit}
+button {cursor:pointer}
+header {
+  background:var(--dark);
+  color:white;
+  padding:16px 5%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  flex-wrap:wrap;
 }
-.brand{display:flex;align-items:center;gap:12px}
-.logo{
-  width:43px;height:43px;border-radius:13px;
-  display:grid;place-items:center;background:#2b8054;font-size:22px;
+.brand {display:flex;align-items:center;gap:12px}
+.logo {
+  width:44px;height:44px;border-radius:13px;
+  background:#e7f4e8;color:var(--green);
+  display:grid;place-items:center;font-size:25px;
 }
-.brand h2{font-size:19px;margin:0}
-.brand small{color:#c4dfcd}
-.header-right{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-select,button,input{font:inherit;border-radius:9px;padding:10px 12px}
-select{border:1px solid #d5e0d7;background:white;color:#20372b}
-button{cursor:pointer;border:0}
-main{max-width:1250px;margin:auto;padding:25px 20px}
-.hero{
-  background:linear-gradient(120deg,#164d34,#247b4b);
-  color:white;padding:35px;border-radius:18px;
+.brand h1 {font-size:21px;line-height:1.2}
+.brand p {font-size:12px;color:#c6dfce}
+.header-actions {display:flex;gap:10px;align-items:center}
+.language-btn {
+  border:1px solid #b8d4c2;background:transparent;
+  color:white;padding:9px 15px;border-radius:9px;
+  font-weight:bold;
+}
+.language-btn:hover {background:#ffffff20}
+main {max-width:1250px;margin:auto;padding:25px 4% 50px}
+.hero {
+  background:linear-gradient(120deg,#164d35,#258454);
+  color:white;padding:30px;border-radius:18px;
   display:flex;justify-content:space-between;
   align-items:center;gap:20px;flex-wrap:wrap;
+  box-shadow:0 8px 25px #174b3220;
 }
-.hero h1{font-size:clamp(25px,4vw,38px);margin:0 0 10px}
-.hero p{color:#d9eddf;line-height:1.7;max-width:680px}
-.hero-tag{background:#ffffff1c;padding:12px 17px;border-radius:12px}
-.section{margin-top:30px}
-.section-head{
+.hero h2 {font-size:30px;margin-bottom:7px}
+.hero p {color:#e0f1e5}
+.hero-tag {
+  background:#ffffff20;border:1px solid #ffffff40;
+  border-radius:30px;padding:10px 15px;font-size:13px;
+}
+.section {margin-top:30px}
+.section-title {
   display:flex;justify-content:space-between;
-  align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px;
+  align-items:center;gap:12px;flex-wrap:wrap;
+  margin-bottom:15px;
 }
-.section-head h2{font-size:22px;margin:0}
-.muted{color:var(--muted);font-size:13px}
-.cards{
-  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;
+.section-title h2 {font-size:21px;color:var(--dark)}
+.section-title p {font-size:13px;color:var(--muted)}
+.crop-select {
+  padding:10px 14px;border:1px solid var(--border);
+  border-radius:9px;background:white;color:var(--dark);
+  min-width:170px;
 }
-.card{
-  background:white;border:1px solid #e3ebe4;border-radius:15px;
-  padding:19px;box-shadow:0 4px 15px #163d2510;
+.grid {display:grid;gap:15px}
+.weather-grid {grid-template-columns:repeat(4,minmax(0,1fr))}
+.card {
+  background:white;border:1px solid var(--border);
+  padding:19px;border-radius:15px;
+  box-shadow:0 3px 12px #183b2410;
 }
-.card-top{display:flex;justify-content:space-between;align-items:center}
-.card-icon{
+.metric-top {display:flex;justify-content:space-between;align-items:center}
+.metric-icon {
   width:40px;height:40px;border-radius:12px;
-  display:grid;place-items:center;background:#e8f4eb;color:var(--green);
+  display:grid;place-items:center;font-size:21px;
+  background:#eaf5ed;
 }
-.card h3{font-size:14px;color:#64756a;margin:14px 0 8px}
-.metric{font-size:29px;font-weight:750;color:#173f2b}
-.card small{color:var(--muted)}
-.status{
-  display:inline-block;border-radius:30px;padding:5px 9px;
-  font-size:11px;background:#edf5ee;color:#24633d;
+.metric-label {font-size:13px;color:var(--muted);margin-top:12px}
+.metric-value {font-size:27px;font-weight:800;color:var(--dark)}
+.metric-note {font-size:12px;color:var(--muted);margin-top:3px}
+.status {
+  display:inline-block;padding:4px 9px;
+  border-radius:20px;background:#e9f5eb;
+  color:#216b40;font-size:11px;font-weight:bold;
 }
-.status.error{background:#fff0e8;color:#a54b21}
-.status.loading{background:#fff7df;color:#805e10}
-.forecast{
-  display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:9px;
+.forecast-grid {grid-template-columns:repeat(7,minmax(0,1fr))}
+.forecast-day {text-align:center;padding:13px 7px}
+.forecast-day strong {display:block;font-size:13px}
+.forecast-icon {font-size:24px;margin:7px 0}
+.forecast-day small {font-size:11px;color:var(--muted)}
+.advisor-grid {grid-template-columns:1.2fr .8fr}
+.advice-card {
+  background:white;border:1px solid var(--border);
+  border-radius:15px;padding:22px;
 }
-.day{
-  background:white;border:1px solid #e3ebe4;border-radius:12px;
-  padding:13px 7px;text-align:center;
+.advice-card h3 {color:var(--dark);margin-bottom:10px}
+.advice-card p {font-size:14px;color:#53645a}
+.advice-list {padding-left:20px;margin-top:12px;font-size:14px}
+.advice-list li {margin:7px 0}
+.strategy-grid {grid-template-columns:repeat(3,minmax(0,1fr))}
+.strategy-card {border-top:4px solid var(--green)}
+.strategy-card h3 {font-size:17px;margin-bottom:8px}
+.strategy-card p {font-size:13px;color:var(--muted)}
+.strategy-card ul {padding-left:18px;margin-top:10px;font-size:13px}
+.strategy-card li {margin:6px 0}
+.map-tools {
+  display:flex;gap:9px;flex-wrap:wrap;margin-bottom:13px;
 }
-.day strong{display:block;font-size:13px}
-.day .weather-icon{font-size:22px;margin:10px 0;color:#d39c30}
-.day small{color:var(--muted);font-size:11px}
-.strategy-grid{
-  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;
+.map-tools input {
+  flex:1;min-width:190px;padding:11px 13px;
+  border:1px solid var(--border);border-radius:9px;
 }
-.strategy{border-top:4px solid var(--green)}
-.strategy:nth-child(2){border-top-color:#c18b36}
-.strategy:nth-child(3){border-top-color:#548d68}
-.strategy h3{margin:10px 0}
-.strategy p{font-size:13px;line-height:1.6;color:#617267}
-.strategy ul{padding-left:18px;font-size:13px;line-height:1.9}
-.strategy .tag{font-size:11px;color:var(--green);font-weight:700}
-.action{background:var(--green);color:white;padding:11px 14px}
-.action.secondary{background:#e8f1e9;color:var(--dark)}
-.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.info-grid .card p{font-size:13px;line-height:1.6;color:#64756a}
-footer{
-  margin-top:35px;padding:25px;text-align:center;
-  background:#123c2b;color:#d4e5d8;font-size:12px;line-height:1.8;
+.tool-btn {
+  border:0;background:var(--green);color:white;
+  padding:10px 14px;border-radius:9px;font-size:13px;
 }
-
-/* MAP DESIGN */
-.map-toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
-.map-search-wrap{position:relative;flex:1;min-width:230px}
-.map-search-wrap input{
-  width:100%;padding:13px 16px;border:1px solid #d5e0d7;
-  background:white;border-radius:11px;outline:none;
+.tool-btn.secondary {background:#e7f0e9;color:var(--dark)}
+.tool-btn:hover {filter:brightness(.94)}
+.search-results {
+  position:relative;z-index:500;
 }
-.map-search-wrap input:focus{
-  border-color:#176b43;box-shadow:0 0 0 3px #176b4320;
+#searchResults {
+  position:absolute;top:3px;left:0;right:0;
+  background:white;border-radius:10px;
+  box-shadow:0 6px 20px #0002;overflow:hidden;
 }
-#mapResults{
-  display:none;position:absolute;top:calc(100% + 7px);left:0;
-  width:100%;background:white;border:1px solid #e0e9e1;
-  border-radius:12px;box-shadow:0 8px 25px #0002;
-  z-index:1200;max-height:280px;overflow-y:auto;
+.search-result {
+  padding:11px 14px;border-bottom:1px solid #eee;
+  cursor:pointer;font-size:13px;
 }
-.map-result{
-  display:block;width:100%;padding:12px 15px;
-  background:white;color:#20372b;text-align:left;
-  border-radius:0;border-bottom:1px solid #edf1ed;
+.search-result:hover {background:#eff7f0}
+#map {
+  height:480px;width:100%;border-radius:15px;
+  border:1px solid var(--border);z-index:1;
 }
-.map-result:hover{background:#edf6ef}
-.map-result strong{display:block;color:#176b43;font-size:14px}
-.map-result small{display:block;color:#718078;font-size:11px;margin-top:4px}
-.map-container{
-  position:relative;width:100%;overflow:hidden;
-  border-radius:17px;border:1px solid #dce7dd;
-  background:#e8eee9;box-shadow:0 8px 25px #123c2b15;
+.map-note {
+  color:var(--muted);font-size:12px;margin-top:10px;
 }
-#map{height:590px;width:100%;background:#e8eee9;z-index:1}
-.map-caption{
-  position:absolute;bottom:14px;left:14px;z-index:500;
-  padding:10px 14px;background:rgba(255,255,255,.96);
-  border-radius:10px;font-size:12px;font-weight:700;
-  color:#176b43;box-shadow:0 3px 12px #0002;pointer-events:none;
+.legend {
+  display:flex;gap:15px;flex-wrap:wrap;
+  margin-top:13px;font-size:12px;color:var(--muted);
 }
-.leaflet-control-zoom,.leaflet-control-layers{
-  border:0!important;border-radius:11px!important;
-  overflow:hidden;box-shadow:0 3px 15px #0002!important;
+.legend span {display:flex;align-items:center;gap:6px}
+.dot {width:10px;height:10px;border-radius:50%;display:inline-block}
+.data-note {
+  background:#edf5ed;border-left:4px solid var(--green);
+  border-radius:8px;padding:15px;font-size:13px;
+  color:#4c6253;margin-top:25px;
 }
-.leaflet-control-zoom a{
-  color:#176b43!important;background:white!important;
-  border-bottom:1px solid #edf1ed!important;
+footer {
+  background:var(--dark);color:#d7e8dc;
+  padding:22px 5%;text-align:center;font-size:13px;
 }
-.leaflet-control-layers{
-  background:rgba(255,255,255,.97)!important;
-  padding:8px;font-size:12px;font-weight:600;
+footer strong {color:white}
+.loading {color:var(--muted);font-size:13px}
+@media(max-width:850px) {
+  .weather-grid {grid-template-columns:repeat(2,1fr)}
+  .forecast-grid {grid-template-columns:repeat(4,1fr)}
+  .strategy-grid {grid-template-columns:1fr}
+  .advisor-grid {grid-template-columns:1fr}
 }
-.leaflet-control-layers label{margin:7px 4px}
-.leaflet-popup-content-wrapper{border-radius:13px!important}
-.leaflet-popup-content{font-family:Arial,sans-serif;font-size:13px;line-height:1.7}
-.leaflet-popup-content strong{color:#176b43;font-size:15px}
-.legend{
-  background:white;padding:14px;border:1px solid #e3ebe4;
-  border-radius:12px;display:flex;flex-wrap:wrap;
-  gap:15px;margin-top:13px;font-size:12px;color:#506357;
-}
-.dot{
-  display:inline-block;width:10px;height:10px;
-  border-radius:50%;margin-right:5px;
-}
-.turmeric{background:#c68b27}
-.paddy{background:#287cba}
-.sugarcane{background:#398451}
-.millet{background:#8b64b4}
-.water{background:#2799a3}
-
-@media(max-width:850px){
-  .cards{grid-template-columns:repeat(2,1fr)}
-  .strategy-grid,.info-grid{grid-template-columns:1fr}
-  .forecast{grid-template-columns:repeat(4,1fr)}
-}
-@media(max-width:600px){
-  main{padding:16px 12px}
-  .cards{gap:9px}
-  .card{padding:13px}
-  .metric{font-size:23px}
-  .hero{padding:23px}
-  #map{height:450px}
-  .map-search-wrap{min-width:100%}
-  .map-container{border-radius:12px}
-  .forecast{grid-template-columns:repeat(4,1fr)}
+@media(max-width:520px) {
+  header {padding:14px 4%}
+  .brand h1 {font-size:17px}
+  .hero {padding:22px}
+  .hero h2 {font-size:24px}
+  main {padding:18px 4% 35px}
+  #map {height:390px}
+  .forecast-grid {grid-template-columns:repeat(2,1fr)}
 }
 </style>
 </head>
 
 <body>
+
 <header>
   <div class="brand">
-    <div class="logo"><i class="fa-solid fa-seedling"></i></div>
+    <div class="logo">🌱</div>
     <div>
-      <h2>AgriShift</h2>
-      <small>Erode Farm Climate Advisor</small>
+      <h1>AgriShift</h1>
+      <p data-i18n="headerSub">Erode Farm Climate Advisor</p>
     </div>
   </div>
-  <div class="header-right">
-    <label for="cropSelect">Select crop:</label>
-    <select id="cropSelect">
-      <option value="Turmeric">Turmeric</option>
-      <option value="Paddy">Paddy</option>
-      <option value="Sugarcane">Sugarcane</option>
-    </select>
-    <button class="action secondary" onclick="loadWeather()">
-      <i class="fa-solid fa-rotate"></i> Refresh
-    </button>
+  <div class="header-actions">
+    <button class="language-btn" id="languageToggle" onclick="toggleLanguage()">தமிழ்</button>
   </div>
 </header>
 
 <main>
-<section class="hero">
-  <div>
-    <h1>Field Shift: Adapting Farms with NASA Data</h1>
-    <p>
-      Understand Erode's changing climate, monitor estimated soil moisture
-      and explore crop strategies using weather and agricultural climate data.
-    </p>
-    <span class="hero-tag">
-      <i class="fa-solid fa-location-dot"></i>
-      Erode, Tamil Nadu, India
-    </span>
-  </div>
-  <div class="hero-tag"><i class="fa-solid fa-leaf"></i> Smart Agriculture</div>
-</section>
 
-<section class="section">
-  <div class="section-head">
-    <h2><i class="fa-solid fa-cloud-sun"></i> Local Climate Dashboard</h2>
-    <span id="weatherStatus" class="status loading">Loading weather...</span>
-  </div>
-  <div class="cards">
-    <div class="card">
-      <div class="card-top"><div class="card-icon"><i class="fa-solid fa-temperature-half"></i></div><span class="status">Model data</span></div>
-      <h3>Air Temperature</h3><div class="metric" id="temperature">-- °C</div>
-      <small>At approximately 2 metres</small>
+  <section class="hero">
+    <div>
+      <h2 data-i18n="heroTitle">Smart Farming Starts with Climate Data</h2>
+      <p data-i18n="heroSub">Climate insights and crop guidance for farmers in the Erode region.</p>
     </div>
-    <div class="card">
-      <div class="card-top"><div class="card-icon"><i class="fa-solid fa-droplet"></i></div><span class="status">Model data</span></div>
-      <h3>Relative Humidity</h3><div class="metric" id="humidity">-- %</div>
-      <small>Atmospheric humidity</small>
-    </div>
-    <div class="card">
-      <div class="card-top"><div class="card-icon"><i class="fa-solid fa-cloud-rain"></i></div><span class="status">Model data</span></div>
-      <h3>Current Precipitation</h3><div class="metric" id="rainfall">-- mm</div>
-      <small>Latest available current value</small>
-    </div>
-    <div class="card">
-      <div class="card-top"><div class="card-icon"><i class="fa-solid fa-water"></i></div><span class="status">Model estimate</span></div>
-      <h3>Surface Soil Moisture</h3><div class="metric" id="moisture">--</div>
-      <small>Volumetric water content, 0–7 cm</small>
-    </div>
-  </div>
-  <p id="updated" class="muted">Waiting for weather data...</p>
-  <p class="muted">Weather source: Open-Meteo. Soil moisture is a gridded model estimate, not a direct farm sensor measurement.</p>
-</section>
+    <div class="hero-tag" data-i18n="tagline">🌍 Field Shift: Adapting Farms with NASA Data</div>
+  </section>
 
-<section class="section">
-  <div class="section-head">
-    <h2><i class="fa-solid fa-calendar-days"></i> 7-Day Weather Outlook</h2>
-    <span class="muted">Erode forecast</span>
-  </div>
-  <div class="forecast" id="forecast"><div class="day">Loading forecast...</div></div>
-</section>
+  <section class="section">
+    <div class="section-title">
+      <div>
+        <h2 data-i18n="weatherTitle">🌦️ Regional Weather Dashboard</h2>
+        <p id="locationLabel">📍 Erode, Tamil Nadu</p>
+      </div>
+      <span class="status" id="weatherStatus" data-i18n="loading">Loading data...</span>
+    </div>
 
-<section class="section">
-  <div class="section-head">
-    <h2><i class="fa-solid fa-seedling"></i> Crop Advisor</h2>
-    <span class="muted" id="cropTitle">Turmeric selected</span>
-  </div>
-  <div class="card">
-    <h3 id="cropHeading">Turmeric farming in Erode</h3>
-    <p id="cropAdvice" class="muted"></p>
-    <div id="cropTips"></div>
-  </div>
-</section>
+    <div class="grid weather-grid">
+      <div class="card">
+        <div class="metric-top"><span>🌡️</span><span class="status">Weather</span></div>
+        <div class="metric-label" data-i18n="temperature">Temperature</div>
+        <div class="metric-value" id="temperature">--°C</div>
+        <div class="metric-note" data-i18n="tempNote">Current model estimate</div>
+      </div>
+      <div class="card">
+        <div class="metric-top"><span>🌧️</span><span class="status">Weather</span></div>
+        <div class="metric-label" data-i18n="rainfall">Rainfall</div>
+        <div class="metric-value" id="rainfall">-- mm</div>
+        <div class="metric-note" data-i18n="rainNote">Current precipitation</div>
+      </div>
+      <div class="card">
+        <div class="metric-top"><span>💧</span><span class="status">Weather</span></div>
+        <div class="metric-label" data-i18n="humidity">Humidity</div>
+        <div class="metric-value" id="humidity">--%</div>
+        <div class="metric-note" data-i18n="humidityNote">Relative humidity</div>
+      </div>
+      <div class="card">
+        <div class="metric-top"><span>🌱</span><span class="status">Model</span></div>
+        <div class="metric-label" data-i18n="soilMoisture">Soil Moisture</div>
+        <div class="metric-value" id="soilMoisture">--</div>
+        <div class="metric-note" data-i18n="soilNote">Estimated topsoil moisture</div>
+      </div>
+    </div>
+  </section>
 
-<section class="section">
-  <div class="section-head">
-    <h2><i class="fa-solid fa-arrows-rotate"></i> Crop Rotation Strategy Comparison</h2>
-    <span class="muted">Three farming approaches</span>
-  </div>
-  <div class="strategy-grid">
-    <div class="card strategy">
-      <span class="tag">01 · REFERENCE APPROACH</span>
-      <h3>Baseline</h3>
-      <p>Continue the existing crop sequence and compare its performance against alternative strategies.</p>
-      <ul>
-        <li>Maintain current crop practices</li>
-        <li>Monitor rainfall and irrigation needs</li>
-        <li>Track input use and crop performance</li>
-        <li>Use as the comparison reference</li>
-      </ul>
+  <section class="section">
+    <div class="section-title">
+      <div>
+        <h2 data-i18n="forecastTitle">📅 7-Day Weather Forecast</h2>
+        <p data-i18n="forecastSub">Regional forecast for the selected location</p>
+      </div>
     </div>
-    <div class="card strategy">
-      <span class="tag">02 · SOIL RECOVERY</span>
-      <h3>Soil Recovery (Pulses)</h3>
-      <p>Introduce suitable pulses into the rotation to support soil health and diversify farm production.</p>
-      <ul>
-        <li>Consider locally suitable pulse crops</li>
-        <li>Legumes can contribute nitrogen to soil</li>
-        <li>Use crop residues where appropriate</li>
-        <li>Check season, soil and water availability</li>
-      </ul>
+    <div class="grid forecast-grid" id="forecast">
+      <div class="card loading" data-i18n="forecastLoading">Loading forecast...</div>
     </div>
-    <div class="card strategy">
-      <span class="tag">03 · CLIMATE RESILIENT</span>
-      <h3>Climate Resilient (Millets)</h3>
-      <p>Consider suitable millets as part of a diversified approach for farms facing water limitations.</p>
-      <ul>
-        <li>Evaluate locally suitable millet varieties</li>
-        <li>Review seasonal rainfall patterns</li>
-        <li>Consider water availability</li>
-        <li>Compare costs, duration and market demand</li>
-      </ul>
-    </div>
-  </div>
-  <p class="muted">These are planning strategies, not guaranteed yield or profit predictions.</p>
-</section>
+  </section>
 
-<!-- GLOBAL MAP -->
-<section class="section">
-  <div class="section-head">
-    <h2><i class="fa-solid fa-map-location-dot"></i> AgriShift Global Agricultural Map</h2>
-    <span class="muted">Explore locations worldwide</span>
-  </div>
-  <div class="map-toolbar">
-    <div class="map-search-wrap">
-      <input id="mapSearch" type="search" placeholder="Search any city, village, country or address..." autocomplete="off">
-      <div id="mapResults"></div>
+  <section class="section">
+    <div class="section-title">
+      <div>
+        <h2 data-i18n="cropTitle">🌾 Crop Advisor</h2>
+        <p data-i18n="cropSub">Select a crop to view basic climate guidance</p>
+      </div>
+      <select class="crop-select" id="cropSelect" onchange="updateCropAdvice()">
+        <option value="turmeric">Turmeric / மஞ்சள்</option>
+        <option value="paddy">Paddy / நெல்</option>
+        <option value="sugarcane">Sugarcane / கரும்பு</option>
+      </select>
     </div>
-    <button class="action" onclick="searchMap()"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
-    <button class="action secondary" onclick="resetMap()"><i class="fa-solid fa-house"></i> Erode</button>
-    <button class="action secondary" onclick="locateMe()"><i class="fa-solid fa-location-crosshairs"></i> My Location</button>
-  </div>
-  <div class="map-container">
+
+    <div class="grid advisor-grid">
+      <div class="advice-card">
+        <h3 id="cropAdviceTitle">🌱 Turmeric Guidance</h3>
+        <p id="cropAdviceText">Select a crop to see recommendations.</p>
+        <ul class="advice-list" id="cropAdviceList"></ul>
+      </div>
+      <div class="advice-card">
+        <h3 data-i18n="farmTipTitle">💡 Farming Tip</h3>
+        <p data-i18n="farmTipText">Use local soil observations along with regional weather information before making irrigation and planting decisions.</p>
+        <br>
+        <span class="status" data-i18n="tipLabel">Climate-aware farming</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-title">
+      <div>
+        <h2 data-i18n="strategyTitle">♻️ Sustainable Farming Strategies</h2>
+        <p data-i18n="strategySub">Compare approaches for long-term farm resilience</p>
+      </div>
+    </div>
+    <div class="grid strategy-grid">
+      <div class="card strategy-card" style="border-top-color:#b68a45">
+        <h3 data-i18n="baselineTitle">🌾 1. Baseline Farming</h3>
+        <p data-i18n="baselineText">Conventional crop management using existing practices.</p>
+        <ul>
+          <li data-i18n="baseline1">Continue familiar crop choices</li>
+          <li data-i18n="baseline2">Monitor seasonal rainfall</li>
+          <li data-i18n="baseline3">Plan irrigation carefully</li>
+        </ul>
+      </div>
+      <div class="card strategy-card" style="border-top-color:#3b9b68">
+        <h3 data-i18n="recoveryTitle">🌱 2. Soil Recovery</h3>
+        <p data-i18n="recoveryText">Improve soil health with suitable crop rotation and organic matter.</p>
+        <ul>
+          <li data-i18n="recovery1">Include suitable pulse crops</li>
+          <li data-i18n="recovery2">Add compost where appropriate</li>
+          <li data-i18n="recovery3">Reduce soil erosion</li>
+        </ul>
+      </div>
+      <div class="card strategy-card" style="border-top-color:#4c8ec9">
+        <h3 data-i18n="resilientTitle">🌦️ 3. Climate Resilient</h3>
+        <p data-i18n="resilientText">Adapt farm planning to changing rainfall and temperature patterns.</p>
+        <ul>
+          <li data-i18n="resilient1">Consider suitable millet varieties</li>
+          <li data-i18n="resilient2">Use water-saving irrigation</li>
+          <li data-i18n="resilient3">Check local weather updates</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-title">
+      <div>
+        <h2 data-i18n="mapTitle">🗺️ Interactive Agricultural Map</h2>
+        <p data-i18n="mapSub">Explore Erode and search for other places worldwide</p>
+      </div>
+    </div>
+
+    <div class="map-tools">
+      <input id="locationSearch" type="text" placeholder="Search any city, town or place..." data-i18n-placeholder="searchPlaceholder">
+      <button class="tool-btn" onclick="searchLocation()" data-i18n="searchBtn">🔍 Search</button>
+      <button class="tool-btn secondary" onclick="goToErode()" data-i18n="erodeBtn">📍 Erode</button>
+      <button class="tool-btn secondary" onclick="myLocation()" data-i18n="myLocationBtn">◎ My Location</button>
+      <button class="tool-btn secondary" onclick="toggleLayers()" data-i18n="layerBtn">🛰️ Satellite</button>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+
     <div id="map"></div>
-    <div class="map-caption"><i class="fa-solid fa-earth-asia"></i> Global Map · English Search</div>
-  </div>
-  <div class="legend">
-    <span><i class="dot turmeric"></i> Turmeric reference</span>
-    <span><i class="dot paddy"></i> Paddy reference</span>
-    <span><i class="dot sugarcane"></i> Sugarcane reference</span>
-    <span><i class="dot millet"></i> Millet reference</span>
-    <span><i class="dot water"></i> Water features</span>
-  </div>
-  <p class="muted">Global search powered by Photon. Street map by OpenStreetMap. Crop locations are illustrative regional references, not verified farms.</p>
-</section>
 
-<section class="section">
-  <div class="section-head"><h2><i class="fa-solid fa-circle-info"></i> Data and Method</h2></div>
-  <div class="info-grid">
-    <div class="card">
-      <h3>Weather information</h3>
-      <p>Temperature, humidity, precipitation and forecast information are retrieved from Open-Meteo weather data.</p>
+    <div class="legend">
+      <span><i class="dot" style="background:#269c5b"></i><span data-i18n="farmLegend">Agricultural area reference</span></span>
+      <span><i class="dot" style="background:#268bd2"></i><span data-i18n="waterLegend">Water point reference</span></span>
+      <span><i class="dot" style="background:#e4a63d"></i><span data-i18n="erodeLegend">Erode region</span></span>
     </div>
-    <div class="card">
-      <h3>Soil moisture</h3>
-      <p>Soil water content is retrieved from a weather-model dataset, not a laboratory soil test or field sensor.</p>
-    </div>
-    <div class="card">
-      <h3>NASA climate context</h3>
-      <p>NASA POWER can support historical climate comparisons. Historical data should not be labelled as live weather.</p>
-    </div>
+    <p class="map-note" data-i18n="mapNote">Map markers are illustrative regional references, not verified farm or water-site records.</p>
+  </section>
+
+  <div class="data-note">
+    <strong data-i18n="dataTitle">📊 About the data:</strong>
+    <span data-i18n="dataText">Weather information is provided by Open-Meteo. Soil moisture is a gridded model estimate, not a measurement from your farm. This project does not currently use live NASA satellite measurements. Always confirm important farming decisions with local agricultural experts and field observations.</span>
   </div>
-</section>
+
 </main>
 
 <footer>
-  <strong>AgriShift · Erode Farm Climate Advisor</strong><br>
-  Field Shift: Adapting Farms with NASA Data<br>
-  Weather: Open-Meteo · Map: OpenStreetMap · Search: Photon<br>
-  Educational climate information, not a substitute for local agricultural advice.
+  <strong>AgriShift</strong> — <span data-i18n="footerText">Field Shift: Adapting Farms with Climate Data</span>
+  <br> <span data-i18n="footerSub">Designed for climate-aware agriculture in Erode, Tamil Nadu.</span>
 </footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 <script>
-// ========================================
-// WEATHER DASHBOARD
-// ========================================
+// ==========================================
+// 1. LANGUAGE SYSTEM: ENGLISH + TAMIL
+// ==========================================
 
-const $=id=>document.getElementById(id);
-
-const WEATHER_URL=
-"https://api.open-meteo.com/v1/forecast"+
-"?latitude=11.3410&longitude=77.7172"+
-"&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,rain,weather_code,wind_speed_10m"+
-"&hourly=precipitation,soil_moisture_0_to_7cm,soil_moisture_7_to_28cm,soil_moisture_28_to_100cm"+
-"&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code"+
-"&forecast_days=7&timezone=Asia%2FKolkata";
-
-function displayNumber(value,digits=1){
-  return Number.isFinite(value)?value.toFixed(digits):"--";
-}
-
-function weatherIcon(code){
-  if(code===0)return "fa-sun";
-  if([1,2,3].includes(code))return "fa-cloud-sun";
-  if([45,48].includes(code))return "fa-smog";
-  if([51,53,55,56,57].includes(code))return "fa-cloud-rain";
-  if([61,63,65,66,67,80,81,82].includes(code))return "fa-cloud-showers-heavy";
-  if([95,96,99].includes(code))return "fa-cloud-bolt";
-  return "fa-cloud";
-}
-
-async function loadWeather(){
-  const status=$("weatherStatus");
-  status.textContent="Updating...";
-  status.className="status loading";
-  try{
-    const response=await fetch(WEATHER_URL,{cache:"no-store"});
-    if(!response.ok)throw new Error("Weather unavailable");
-    const data=await response.json();
-    const current=data.current;
-    const hourly=data.hourly;
-    if(!current||!hourly)throw new Error("Incomplete data");
-
-    $("temperature").textContent=displayNumber(current.temperature_2m)+" °C";
-    $("humidity").textContent=displayNumber(current.relative_humidity_2m,0)+" %";
-    $("rainfall").textContent=displayNumber(current.precipitation,1)+" mm";
-
-    const currentIndex=hourly.time.findIndex(t=>t===current.time);
-    const index=currentIndex>=0?currentIndex:hourly.time.length-1;
-    const moisture=hourly.soil_moisture_0_to_7cm[index];
-
-    $("moisture").textContent=Number.isFinite(moisture)
-      ?(moisture*100).toFixed(1)+" %":"N/A";
-
-    $("updated").textContent=
-      "Weather model time: "+current.time.replace("T"," ")+
-      " · Last checked: "+new Date().toLocaleString("en-IN");
-
-    status.textContent="Weather data loaded";
-    status.className="status";
-    renderForecast(data.daily);
-  }catch(error){
-    status.textContent="Data unavailable";
-    status.className="status error";
-    $("updated").textContent="Could not retrieve data. Check your internet and try again.";
-  }
-}
-
-function renderForecast(daily){
-  if(!daily||!daily.time)return;
-  $("forecast").innerHTML=daily.time.map((date,i)=>{
-    const day=new Date(date+"T12:00:00");
-    const dayName=day.toLocaleDateString("en-IN",{weekday:"short"});
-    return `
-      <div class="day">
-        <strong>${dayName}</strong>
-        <div class="weather-icon"><i class="fa-solid ${weatherIcon(daily.weather_code[i])}"></i></div>
-        <strong>${displayNumber(daily.temperature_2m_max[i],0)}°</strong>
-        <small>${displayNumber(daily.temperature_2m_min[i],0)}° min</small>
-        <p><small>${displayNumber(daily.precipitation_sum[i],1)} mm rain</small></p>
-      </div>`;
-  }).join("");
-}
-
-// ========================================
-// CROP ADVISOR
-// ========================================
-
-const cropInfo={
-  Turmeric:{
-    heading:"Turmeric farming in Erode",
-    advice:"Turmeric needs suitable soil, reliable water supply and a suitable growing season. Monitor rainfall, drainage and soil moisture before making irrigation decisions.",
-    tips:["Check soil drainage and field preparation.","Avoid waterlogging.","Use locally recommended varieties and planting dates."]
+const translations = {
+  en: {
+    headerSub:"Erode Farm Climate Advisor",
+    heroTitle:"Smart Farming Starts with Climate Data",
+    heroSub:"Climate insights and crop guidance for farmers in the Erode region.",
+    tagline:"🌍 Field Shift: Adapting Farms with NASA Data",
+    weatherTitle:"🌦️ Regional Weather Dashboard",
+    loading:"Loading data...",
+    temperature:"Temperature", rainfall:"Rainfall", humidity:"Humidity",
+    soilMoisture:"Soil Moisture",
+    tempNote:"Current model estimate",rainNote:"Current precipitation",
+    humidityNote:"Relative humidity",soilNote:"Estimated topsoil moisture",
+    forecastTitle:"📅 7-Day Weather Forecast",
+    forecastSub:"Regional forecast for the selected location",
+    forecastLoading:"Loading forecast...",
+    cropTitle:"🌾 Crop Advisor",
+    cropSub:"Select a crop to view basic climate guidance",
+    farmTipTitle:"💡 Farming Tip",
+    farmTipText:"Use local soil observations along with regional weather information before making irrigation and planting decisions.",
+    tipLabel:"Climate-aware farming",
+    strategyTitle:"♻️ Sustainable Farming Strategies",
+    strategySub:"Compare approaches for long-term farm resilience",
+    baselineTitle:"🌾 1. Baseline Farming",
+    baselineText:"Conventional crop management using existing practices.",
+    baseline1:"Continue familiar crop choices",
+    baseline2:"Monitor seasonal rainfall",
+    baseline3:"Plan irrigation carefully",
+    recoveryTitle:"🌱 2. Soil Recovery",
+    recoveryText:"Improve soil health with suitable crop rotation and organic matter.",
+    recovery1:"Include suitable pulse crops",
+    recovery2:"Add compost where appropriate",
+    recovery3:"Reduce soil erosion",
+    resilientTitle:"🌦️ 3. Climate Resilient",
+    resilientText:"Adapt farm planning to changing rainfall and temperature patterns.",
+    resilient1:"Consider suitable millet varieties",
+    resilient2:"Use water-saving irrigation",
+    resilient3:"Check local weather updates",
+    mapTitle:"🗺️ Interactive Agricultural Map",
+    mapSub:"Explore Erode and search for other places worldwide",
+    searchPlaceholder:"Search any city, town or place...",
+    searchBtn:"🔍 Search",erodeBtn:"📍 Erode",
+    myLocationBtn:"◎ My Location",layerBtn:"🛰️ Satellite",
+    farmLegend:"Agricultural area reference",
+    waterLegend:"Water point reference",
+    erodeLegend:"Erode region",
+    mapNote:"Map markers are illustrative regional references, not verified farm or water-site records.",
+    dataTitle:"📊 About the data:",
+    dataText:"Weather information is provided by Open-Meteo. Soil moisture is a gridded model estimate, not a measurement from your farm. This project does not currently use live NASA satellite measurements. Always confirm important farming decisions with local agricultural experts and field observations.",
+    footerText:"Field Shift: Adapting Farms with Climate Data",
+    footerSub:"Designed for climate-aware agriculture in Erode, Tamil Nadu.",
+    searchEmpty:"Please enter a location.",
+    searchNone:"No locations found. Try another search.",
+    searchError:"Location search failed. Please try again.",
+    geoError:"Could not access your location. Please allow location permission.",
+    weatherError:"Weather data unavailable",
+    forecastError:"Forecast unavailable",
+    today:"Today",
+    cropNames:{turmeric:"Turmeric",paddy:"Paddy",sugarcane:"Sugarcane"},
+    cropAdvice:{
+      turmeric:{
+        title:"🌱 Turmeric Guidance",
+        text:"Turmeric generally needs warm conditions, well-drained soil and regular moisture. Avoid waterlogging.",
+        tips:["Check soil moisture before irrigation.","Maintain good drainage during heavy rain.","Use healthy planting material and suitable crop rotation."]
+      },
+      paddy:{
+        title:"🌾 Paddy Guidance",
+        text:"Paddy water requirements depend on the variety, growth stage, soil and local water availability.",
+        tips:["Plan water use based on crop stage.","Monitor rainfall and field water levels.","Use locally recommended water-saving methods."]
+      },
+      sugarcane:{
+        title:"🎋 Sugarcane Guidance",
+        text:"Sugarcane is a long-duration crop. Water planning and soil health are important throughout its growth.",
+        tips:["Use irrigation efficiently.","Maintain soil cover where suitable.","Check local recommendations for planting and harvesting."]
+      }
+    }
   },
-  Paddy:{
-    heading:"Paddy farming in Erode",
-    advice:"Paddy planning depends on irrigation access, rainfall timing and water availability. Use weather forecasts to plan field operations.",
-    tips:["Review reservoir and irrigation availability.","Monitor rainfall and field water levels.","Consider locally recommended water-saving practices."]
-  },
-  Sugarcane:{
-    heading:"Sugarcane farming in Erode",
-    advice:"Sugarcane is a long-duration crop. Water availability, soil conditions and seasonal weather should be considered throughout its growth.",
-    tips:["Monitor irrigation and soil moisture.","Use suitable mulching and soil management practices.","Check local recommendations for crop duration."]
+  ta: {
+    headerSub:"ஈரோடு விவசாய காலநிலை ஆலோசகர்",
+    heroTitle:"காலநிலைத் தரவுடன் சிறந்த விவசாயம்",
+    heroSub:"ஈரோடு பகுதி விவசாயிகளுக்கான காலநிலைத் தகவல்கள் மற்றும் பயிர் ஆலோசனைகள்.",
+    tagline:"🌍 காலநிலை மாற்றத்திற்கு ஏற்ற விவசாயம்",
+    weatherTitle:"🌦️ வானிலை தகவல் பலகை",
+    loading:"தரவு ஏற்றப்படுகிறது...",
+    temperature:"வெப்பநிலை",rainfall:"மழைப்பொழிவு",humidity:"ஈரப்பதம்",
+    soilMoisture:"மண் ஈரப்பதம்",
+    tempNote:"தற்போதைய மாதிரி மதிப்பீடு",
+    rainNote:"தற்போதைய மழைப்பொழிவு",
+    humidityNote:"காற்றின் ஈரப்பதம்",
+    soilNote:"மேல் மண் ஈரப்பத மதிப்பீடு",
+    forecastTitle:"📅 7 நாள் வானிலை முன்னறிவிப்பு",
+    forecastSub:"தேர்ந்தெடுக்கப்பட்ட இடத்திற்கான வானிலை",
+    forecastLoading:"முன்னறிவிப்பு ஏற்றப்படுகிறது...",
+    cropTitle:"🌾 பயிர் ஆலோசகர்",
+    cropSub:"பயிரைத் தேர்ந்தெடுத்து காலநிலை ஆலோசனையைப் பார்க்கவும்",
+    farmTipTitle:"💡 விவசாயக் குறிப்பு",
+    farmTipText:"நீர்ப்பாசனம் மற்றும் நடவு முடிவுகளை எடுக்கும் முன் உள்ளூர் மண் நிலவரத்தையும் வானிலைத் தகவலையும் கவனியுங்கள்.",
+    tipLabel:"காலநிலைக்கு ஏற்ற விவசாயம்",
+    strategyTitle:"♻️ நிலையான விவசாய முறைகள்",
+    strategySub:"நீண்டகால விவசாய பாதுகாப்பிற்கான முறைகள்",
+    baselineTitle:"🌾 1. வழக்கமான விவசாயம்",
+    baselineText:"தற்போதைய வழக்கமான விவசாய முறைகளைப் பயன்படுத்துதல்.",
+    baseline1:"பழக்கமான பயிர்களைத் தொடருதல்",
+    baseline2:"பருவகால மழையைக் கண்காணித்தல்",
+    baseline3:"நீர்ப்பாசனத்தைத் திட்டமிடுதல்",
+    recoveryTitle:"🌱 2. மண் வள மேம்பாடு",
+    recoveryText:"பயிர் சுழற்சி மற்றும் இயற்கை உரம் மூலம் மண் வளத்தை மேம்படுத்துதல்.",
+    recovery1:"பருப்பு வகைப் பயிர்களைச் சேர்த்தல்",
+    recovery2:"தேவையான இடங்களில் மட்கிய உரம் இடுதல்",
+    recovery3:"மண் அரிப்பைக் குறைத்தல்",
+    resilientTitle:"🌦️ 3. காலநிலை தாங்கும் விவசாயம்",
+    resilientText:"மாறும் மழை மற்றும் வெப்பநிலைக்கு ஏற்ப விவசாயத்தைத் திட்டமிடுதல்.",
+    resilient1:"ஏற்ற சிறுதானிய வகைகளைப் பரிசீலித்தல்",
+    resilient2:"நீர் சேமிப்பு பாசன முறைகளைப் பயன்படுத்துதல்",
+    resilient3:"உள்ளூர் வானிலைத் தகவல்களைப் பார்வையிடுதல்",
+    mapTitle:"🗺️ விவசாய ஊடாடும் வரைபடம்",
+    mapSub:"ஈரோடு மற்றும் உலகின் பிற இடங்களைத் தேடுங்கள்",
+    searchPlaceholder:"நகரம் அல்லது இடத்தின் பெயரைத் தேடுங்கள்...",
+    searchBtn:"🔍 தேடு",erodeBtn:"📍 ஈரோடு",
+    myLocationBtn:"◎ எனது இடம்",layerBtn:"🛰️ செயற்கைக்கோள்",
+    farmLegend:"விவசாயப் பகுதி குறிப்பு",
+    waterLegend:"நீர்நிலை குறிப்பு",
+    erodeLegend:"ஈரோடு பகுதி",
+    mapNote:"வரைபடக் குறியீடுகள் எடுத்துக்காட்டு இடங்களைக் காட்டுகின்றன; சரிபார்க்கப்பட்ட பண்ணை அல்லது நீர்நிலைத் தரவுகள் அல்ல.",
+    dataTitle:"📊 தரவு பற்றிய தகவல்:",
+    dataText:"வானிலைத் தகவல்கள் Open-Meteo மூலம் வழங்கப்படுகின்றன. மண் ஈரப்பதம் என்பது கணினி மாதிரி மதிப்பீடு; உங்கள் வயலில் நேரடியாக அளவிடப்பட்டது அல்ல. இந்தத் திட்டம் தற்போது நேரடி NASA செயற்கைக்கோள் அளவீடுகளைப் பயன்படுத்தவில்லை. முக்கிய விவசாய முடிவுகளுக்கு உள்ளூர் வேளாண் நிபுணர்களையும் வயல் நிலவரத்தையும் அணுகவும்.",
+    footerText:"காலநிலைத் தரவுடன் விவசாய மாற்றம்",
+    footerSub:"தமிழ்நாடு ஈரோடு பகுதிக்கான காலநிலை சார்ந்த விவசாயத் திட்டம்.",
+    searchEmpty:"முதலில் ஒரு இடத்தின் பெயரை உள்ளிடவும்.",
+    searchNone:"இடங்கள் கிடைக்கவில்லை. வேறு பெயரை முயற்சிக்கவும்.",
+    searchError:"இடத்தைத் தேட முடியவில்லை. மீண்டும் முயற்சிக்கவும்.",
+    geoError:"உங்கள் இடத்தைக் கண்டறிய முடியவில்லை. Location அனுமதியை வழங்கவும்.",
+    weatherError:"வானிலைத் தரவு கிடைக்கவில்லை",
+    forecastError:"முன்னறிவிப்பு கிடைக்கவில்லை",
+    today:"இன்று",
+    cropNames:{turmeric:"மஞ்சள்",paddy:"நெல்",sugarcane:"கரும்பு"},
+    cropAdvice:{
+      turmeric:{
+        title:"🌱 மஞ்சள் பயிர் ஆலோசனை",
+        text:"மஞ்சள் பயிருக்கு வெப்பமான சூழல், நல்ல வடிகால் வசதி மற்றும் சீரான ஈரப்பதம் பொதுவாகத் தேவை. நீர் தேங்குவதைத் தவிர்க்கவும்.",
+        tips:["நீர்ப்பாசனத்திற்கு முன் மண் ஈரப்பதத்தைச் சரிபார்க்கவும்.","அதிக மழைக்காலத்தில் வடிகால் வசதியைப் பராமரிக்கவும்.","ஆரோக்கியமான விதை மஞ்சளையும் ஏற்ற பயிர் சுழற்சியையும் பயன்படுத்தவும்."]
+      },
+      paddy:{
+        title:"🌾 நெல் பயிர் ஆலோசனை",
+        text:"நெல்லின் நீர் தேவை ரகம், வளர்ச்சி நிலை, மண் மற்றும் உள்ளூர் நீர் இருப்பைப் பொறுத்தது.",
+        tips:["பயிரின் வளர்ச்சி நிலைக்கு ஏற்ப நீரைத் திட்டமிடவும்.","மழையையும் வயல் நீர் அளவையும் கண்காணிக்கவும்.","உள்ளூர் பரிந்துரைக்கப்பட்ட நீர் சேமிப்பு முறைகளைப் பயன்படுத்தவும்."]
+      },
+      sugarcane:{
+        title:"🎋 கரும்பு பயிர் ஆலோசனை",
+        text:"கரும்பு நீண்டகாலப் பயிர். அதன் வளர்ச்சி முழுவதும் நீர் திட்டமிடலும் மண் வளமும் முக்கியம்.",
+        tips:["நீர்ப்பாசனத்தைத் திறமையாகப் பயன்படுத்தவும்.","பொருத்தமான இடங்களில் மண் மூடாக்கைப் பராமரிக்கவும்.","நடவு மற்றும் அறுவடைக்கு உள்ளூர் ஆலோசனைகளைப் பின்பற்றவும்."]
+      }
+    }
   }
 };
 
-function updateCropAdvice(){
-  const crop=$("cropSelect").value;
-  const info=cropInfo[crop];
-  $("cropTitle").textContent=crop+" selected";
-  $("cropHeading").textContent=info.heading;
-  $("cropAdvice").textContent=info.advice;
-  $("cropTips").innerHTML="<ul>"+info.tips.map(t=>"<li>"+t+"</li>").join("")+"</ul>";
+let currentLanguage = localStorage.getItem("agrishift-language") || "en";
+
+function t(key) {
+  return translations[currentLanguage][key] || translations.en[key] || key;
 }
-$("cropSelect").addEventListener("change",updateCropAdvice);
 
-// ========================================
-// GLOBAL MAP - ONE MAP ONLY
-// ========================================
+function applyLanguage() {
+  document.documentElement.lang = currentLanguage;
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.dataset.i18n;
+    if (t(key)) el.textContent = t(key);
+  });
+  document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+    el.placeholder = t(el.dataset.i18nPlaceholder);
+  });
+  document.getElementById("languageToggle").textContent =
+    currentLanguage === "en" ? "தமிழ்" : "English";
 
-const ERODE=[11.3410,77.7172];
+  updateCropAdvice();
+}
 
-const map=L.map("map",{
-  center:ERODE,
-  zoom:10,
-  minZoom:2,
-  maxZoom:19,
-  worldCopyJump:false
-});
+function toggleLanguage() {
+  currentLanguage = currentLanguage === "en" ? "ta" : "en";
+  localStorage.setItem("agrishift-language", currentLanguage);
+  applyLanguage();
+}
 
-const worldBounds=L.latLngBounds(
-  L.latLng(-85,-180),
-  L.latLng(85,180)
-);
-map.setMaxBounds(worldBounds);
-map.options.maxBoundsViscosity=1.0;
+// ==========================================
+// 2. MAP: DEFAULT LOCATION IS ERODE
+// ==========================================
 
-// NORMAL OPENSTREETMAP STREET MAP
-const street=L.tileLayer(
+const erode = [11.3410, 77.7172];
+
+const map = L.map("map", {
+  zoomControl:true,
+  worldCopyJump:true
+}).setView(erode, 10);
+
+const streetLayer = L.tileLayer(
   "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
   {
-    subdomains:["a","b","c"],
-    minZoom:2,
     maxZoom:19,
-    noWrap:true,
-    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
   }
 );
 
-// SATELLITE VIEW
-const satellite=L.tileLayer(
+const satelliteLayer = L.tileLayer(
   "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
   {
-    minZoom:2,
     maxZoom:19,
-    noWrap:true,
-    attribution:"Imagery &copy; Esri and its data providers"
+    attribution:"Tiles &copy; Esri"
   }
 );
 
-street.addTo(map);
+streetLayer.addTo(map);
+L.control.scale({imperial:false}).addTo(map);
 
-L.control.scale({
-  metric:true,
-  imperial:false,
-  position:"bottomright"
-}).addTo(map);
+const farmIcon = L.divIcon({
+  className:"",
+  html:'<div style="background:#269c5b;color:white;border:2px solid white;border-radius:50%;width:31px;height:31px;display:grid;place-items:center;font-size:17px;box-shadow:0 2px 6px #0005">🌱</div>',
+  iconSize:[31,31],
+  iconAnchor:[15,15]
+});
 
-// ========================================
-// ERODE AGRICULTURAL REFERENCE MARKERS
-// ========================================
+const waterIcon = L.divIcon({
+  className:"",
+  html:'<div style="background:#268bd2;color:white;border:2px solid white;border-radius:50%;width:31px;height:31px;display:grid;place-items:center;font-size:16px;box-shadow:0 2px 6px #0005">💧</div>',
+  iconSize:[31,31],
+  iconAnchor:[15,15]
+});
 
-const cropLocations=[
-  {name:"Gobichettipalayam",coords:[11.4549,77.4422],crop:"Turmeric",color:"#c68b27"},
-  {name:"Modakurichi",coords:[11.1680,77.7640],crop:"Turmeric",color:"#c68b27"},
-  {name:"Bhavani",coords:[11.4455,77.6820],crop:"Paddy",color:"#287cba"},
-  {name:"Kodumudi",coords:[11.0775,77.8830],crop:"Paddy",color:"#287cba"},
-  {name:"Perundurai",coords:[11.2756,77.5871],crop:"Sugarcane",color:"#398451"},
-  {name:"Sathyamangalam",coords:[11.5053,76.9000],crop:"Millet",color:"#8b64b4"},
-  {name:"Anthiyur",coords:[11.5760,77.5900],crop:"Millet",color:"#8b64b4"}
+const erodeIcon = L.divIcon({
+  className:"",
+  html:'<div style="background:#e4a63d;color:white;border:2px solid white;border-radius:50%;width:36px;height:36px;display:grid;place-items:center;font-size:18px;box-shadow:0 2px 6px #0005">📍</div>',
+  iconSize:[36,36],
+  iconAnchor:[18,18]
+});
+
+const erodeMarker = L.marker(erode,{icon:erodeIcon})
+  .addTo(map)
+  .bindPopup("<b>📍 Erode, Tamil Nadu</b><br>AgriShift regional reference");
+
+const farmLocations = [
+  [11.3410,77.7172,"Erode"],
+  [11.2189,77.7940,"Perundurai"],
+  [11.2740,77.5830,"Chennimalai"],
+  [11.4300,77.6800,"Gobichettipalayam"],
+  [11.1600,77.5700,"Kangeyam"],
+  [11.4500,77.7200,"Sathyamangalam"]
 ];
 
-const cropLayers={
-  Turmeric:L.layerGroup(),
-  Paddy:L.layerGroup(),
-  Sugarcane:L.layerGroup(),
-  Millet:L.layerGroup()
-};
-
-function makeCropIcon(color){
-  return L.divIcon({
-    className:"",
-    html:`<div style="width:20px;height:20px;background:${color};border:3px solid white;border-radius:50%;box-shadow:0 2px 8px #0005"></div>`,
-    iconSize:[20,20],
-    iconAnchor:[10,10]
-  });
-}
-
-cropLocations.forEach(place=>{
-  L.marker(place.coords,{icon:makeCropIcon(place.color)})
-    .bindPopup(
-      "<strong>"+place.name+"</strong><br>"+
-      "Crop reference: "+place.crop+
-      "<br><small>Illustrative regional location, not a verified farm survey.</small>"
-    )
-    .addTo(cropLayers[place.crop]);
+farmLocations.forEach((p,index) => {
+  if(index === 0) return;
+  L.marker([p[0],p[1]],{icon:farmIcon})
+    .addTo(map)
+    .bindPopup("<b>🌱 "+p[2]+"</b><br>Illustrative agricultural area reference");
 });
 
-// One Erode marker
-L.marker(ERODE)
-  .bindPopup("<strong>AgriShift · Erode</strong><br>Climate dashboard reference location.")
-  .addTo(map);
+const waterLocations = [
+  [11.341,77.717,"Erode region"],
+  [11.250,77.680,"Regional water reference"],
+  [11.400,77.800,"Regional water reference"]
+];
 
-// Water reference points
-const waterLayer=L.layerGroup();
-[
-  {name:"Bhavani River reference",coords:[11.445,77.680]},
-  {name:"Cauvery River reference",coords:[11.070,77.880]}
-].forEach(point=>{
-  L.marker(point.coords)
-    .bindPopup("<strong>"+point.name+"</strong>")
-    .addTo(waterLayer);
+waterLocations.forEach(p => {
+  L.marker([p[0],p[1]],{icon:waterIcon})
+    .addTo(map)
+    .bindPopup("<b>💧 "+p[2]+"</b><br>Illustrative water reference");
 });
 
-Object.values(cropLayers).forEach(layer=>layer.addTo(map));
-waterLayer.addTo(map);
+let satelliteOn = false;
 
-// ONE LAYER SELECTOR
-L.control.layers(
-  {"Street Map":street,"Satellite View":satellite},
-  {
-    "Turmeric":cropLayers.Turmeric,
-    "Paddy":cropLayers.Paddy,
-    "Sugarcane":cropLayers.Sugarcane,
-    "Millet":cropLayers.Millet,
-    "Water Features":waterLayer
-  },
-  {collapsed:true,position:"topright"}
-).addTo(map);
-
-// ========================================
-// WORLDWIDE LOCATION SEARCH
-// ========================================
-
-const searchInput=$("mapSearch");
-const resultsBox=$("mapResults");
-const searchLayer=L.layerGroup().addTo(map);
-
-let searchResults=[];
-let searchTimer=null;
-let searchController=null;
-
-function showSearchMessage(message){
-  resultsBox.replaceChildren();
-  const item=document.createElement("div");
-  item.className="map-result";
-  item.textContent=message;
-  resultsBox.appendChild(item);
-  resultsBox.style.display="block";
+function toggleLayers() {
+  if(satelliteOn) {
+    map.removeLayer(satelliteLayer);
+    streetLayer.addTo(map);
+    satelliteOn = false;
+    document.getElementById("layerBtn").textContent =
+      currentLanguage === "en" ? "🛰️ Satellite" : "🛰️ செயற்கைக்கோள்";
+  } else {
+    map.removeLayer(streetLayer);
+    satelliteLayer.addTo(map);
+    satelliteOn = true;
+    document.getElementById("layerBtn").textContent =
+      currentLanguage === "en" ? "🗺️ Street Map" : "🗺️ சாலை வரைபடம்";
+  }
 }
 
-function escapeMapText(value){
-  return String(value).replace(/[&<>"']/g,character=>({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  })[character]);
+function goToErode() {
+  map.flyTo(erode,10);
+  erodeMarker.openPopup();
+  loadWeather(erode[0],erode[1],"Erode, Tamil Nadu");
 }
 
-async function searchMap(){
-  const query=searchInput.value.trim();
-  if(query.length<2){
-    showSearchMessage("Enter at least two letters.");
+function myLocation() {
+  if(!navigator.geolocation) {
+    alert(t("geoError"));
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(position => {
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+    map.flyTo([lat,lon],13);
+    L.marker([lat,lon]).addTo(map)
+      .bindPopup("📍 Your current location").openPopup();
+    loadWeather(lat,lon,currentLanguage === "en" ? "Your location" : "உங்கள் இடம்");
+  },() => alert(t("geoError")));
+}
+
+// ==========================================
+// 3. WORLDWIDE LOCATION SEARCH
+// ==========================================
+
+async function searchLocation() {
+  const query = document.getElementById("locationSearch").value.trim();
+  const resultsBox = document.getElementById("searchResults");
+
+  if(!query) {
+    alert(t("searchEmpty"));
     return;
   }
 
-  if(searchController)searchController.abort();
-  searchController=new AbortController();
-  showSearchMessage("Searching worldwide locations...");
+  resultsBox.innerHTML = '<div class="search-result">Searching...</div>';
 
-  try{
-    const url="https://photon.komoot.io/api/?q="+
-      encodeURIComponent(query)+"&lang=en&limit=8";
+  try {
+    const url = "https://photon.komoot.io/api/?q="+
+      encodeURIComponent(query)+"&lang=en&limit=6";
 
-    const response=await fetch(url,{signal:searchController.signal});
-    if(!response.ok)throw new Error("Search unavailable");
+    const response = await fetch(url);
+    if(!response.ok) throw new Error("Search failed");
 
-    const data=await response.json();
-    searchResults=data.features||[];
-    resultsBox.replaceChildren();
+    const data = await response.json();
+    resultsBox.innerHTML = "";
 
-    if(searchResults.length===0){
-      showSearchMessage("No matching places found. Try another spelling.");
+    if(!data.features || !data.features.length) {
+      resultsBox.innerHTML = '<div class="search-result">'+t("searchNone")+'</div>';
       return;
     }
 
-    searchResults.forEach((feature,index)=>{
-      const p=feature.properties||{};
-      const title=p.name||"Unnamed location";
-      const details=[p.city,p.district,p.state,p.country]
-        .filter((v,i,a)=>v&&a.indexOf(v)===i&&v!==title);
+    data.features.forEach(place => {
+      const props = place.properties;
+      const coords = place.geometry.coordinates;
+      const name = [
+        props.name,props.city,props.state,props.country
+      ].filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i).join(", ");
 
-      const button=document.createElement("button");
-      button.type="button";
-      button.className="map-result";
-
-      const strong=document.createElement("strong");
-      strong.textContent=title;
-
-      const small=document.createElement("small");
-      small.textContent=details.join(", ")||"Location result";
-
-      button.append(strong,small);
-      button.addEventListener("click",()=>selectSearchResult(index));
-      resultsBox.appendChild(button);
+      const item = document.createElement("div");
+      item.className = "search-result";
+      item.textContent = name || query;
+      item.onclick = () => {
+        map.flyTo([coords[1],coords[0]],12);
+        L.marker([coords[1],coords[0]]).addTo(map)
+          .bindPopup("<b>"+escapeHTML(name || query)+"</b>").openPopup();
+        resultsBox.innerHTML = "";
+        loadWeather(coords[1],coords[0],name || query);
+      };
+      resultsBox.appendChild(item);
     });
-
-    resultsBox.style.display="block";
-  }catch(error){
-    if(error.name!=="AbortError"){
-      showSearchMessage("Search failed. Check your internet and try again.");
-    }
+  } catch(error) {
+    resultsBox.innerHTML = '<div class="search-result">'+t("searchError")+'</div>';
   }
 }
 
-function selectSearchResult(index){
-  const feature=searchResults[index];
-  if(!feature)return;
-
-  const coordinates=feature.geometry.coordinates;
-  const longitude=coordinates[0];
-  const latitude=coordinates[1];
-  const p=feature.properties||{};
-  const title=p.name||"Selected location";
-
-  const details=[p.city,p.district,p.state,p.country]
-    .filter((v,i,a)=>v&&a.indexOf(v)===i&&v!==title);
-
-  searchLayer.clearLayers();
-
-  L.marker([latitude,longitude])
-    .addTo(searchLayer)
-    .bindPopup(
-      "<strong>"+escapeMapText(title)+"</strong><br>"+
-      escapeMapText(details.join(", "))
-    )
-    .openPopup();
-
-  map.flyTo([latitude,longitude],14,{duration:1.2});
-  searchInput.value=title;
-  resultsBox.style.display="none";
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[char]);
 }
 
-// Enter key
-searchInput.addEventListener("keydown",event=>{
-  if(event.key==="Enter"){
-    event.preventDefault();
-    searchMap();
-  }
-  if(event.key==="Escape"){
-    resultsBox.style.display="none";
+document.getElementById("locationSearch").addEventListener("keydown",e=>{
+  if(e.key==="Enter") searchLocation();
+});
+
+document.addEventListener("click",e=>{
+  if(!e.target.closest(".search-results") &&
+     !e.target.closest("#locationSearch") &&
+     !e.target.closest("#searchBtn")) {
+    document.getElementById("searchResults").innerHTML="";
   }
 });
 
-// Automatic suggestions
-searchInput.addEventListener("input",()=>{
-  clearTimeout(searchTimer);
-  const query=searchInput.value.trim();
+// ==========================================
+// 4. WEATHER DATA FROM OPEN-METEO
+// ==========================================
 
-  if(query.length<3){
-    resultsBox.style.display="none";
-    return;
+async function loadWeather(lat=erode[0],lon=erode[1],locationName="Erode, Tamil Nadu") {
+  document.getElementById("weatherStatus").textContent = t("loading");
+  document.getElementById("locationLabel").textContent = "📍 "+locationName;
+
+  const url = "https://api.open-meteo.com/v1/forecast"+
+    "?latitude="+lat+
+    "&longitude="+lon+
+    "&current=temperature_2m,relative_humidity_2m,precipitation,soil_moisture_0_to_7cm"+
+    "&daily=temperature_2m_max,temperature_2m_min,precipitation_sum"+
+    "&timezone=auto&forecast_days=7";
+
+  try {
+    const response = await fetch(url);
+    if(!response.ok) throw new Error("Weather request failed");
+    const data = await response.json();
+    const current = data.current;
+
+    document.getElementById("temperature").textContent =
+      current.temperature_2m+"°C";
+
+    document.getElementById("rainfall").textContent =
+      current.precipitation+" mm";
+
+    document.getElementById("humidity").textContent =
+      current.relative_humidity_2m+"%";
+
+    const moisture = current.soil_moisture_0_to_7cm;
+    document.getElementById("soilMoisture").textContent =
+      moisture == null ? "--" : (moisture*100).toFixed(1)+"%";
+
+    document.getElementById("weatherStatus").textContent =
+      currentLanguage === "en" ? "Updated" : "புதுப்பிக்கப்பட்டது";
+
+    renderForecast(data.daily);
+  } catch(error) {
+    document.getElementById("weatherStatus").textContent = t("weatherError");
+    document.getElementById("forecast").innerHTML =
+      '<div class="card">'+t("forecastError")+'</div>';
   }
-
-  searchTimer=setTimeout(searchMap,650);
-});
-
-// Close results outside search
-document.addEventListener("click",event=>{
-  if(!event.target.closest(".map-search-wrap")){
-    resultsBox.style.display="none";
-  }
-});
-
-// Return to Erode
-function resetMap(){
-  searchLayer.clearLayers();
-  searchInput.value="";
-  resultsBox.style.display="none";
-  map.flyTo(ERODE,10,{duration:1.2});
 }
 
-// Device location
-function locateMe(){
-  if(!navigator.geolocation){
-    alert("Location is not supported by this browser.");
-    return;
-  }
+// ==========================================
+// 5. SEVEN-DAY FORECAST
+// ==========================================
 
-  navigator.geolocation.getCurrentPosition(
-    position=>{
-      const coords=[
-        position.coords.latitude,
-        position.coords.longitude
-      ];
+function renderForecast(daily) {
+  const container = document.getElementById("forecast");
+  container.innerHTML = "";
 
-      searchLayer.clearLayers();
+  daily.time.forEach((date,index) => {
+    const day = new Date(date+"T12:00:00");
+    const dayName = index === 0
+      ? t("today")
+      : day.toLocaleDateString(currentLanguage === "ta" ? "ta-IN" : "en-IN",{weekday:"short"});
 
-      L.marker(coords)
-        .addTo(searchLayer)
-        .bindPopup("<strong>Your current location</strong>")
-        .openPopup();
+    const rain = daily.precipitation_sum[index];
+    const icon = rain >= 5 ? "🌧️" : rain > 0 ? "🌦️" : "☀️";
 
-      map.flyTo(coords,15,{duration:1.2});
-    },
-    ()=>alert("Location permission denied or unavailable.")
-  );
+    const card = document.createElement("div");
+    card.className = "card forecast-day";
+
+    card.innerHTML = `
+      <strong>${dayName}</strong>
+      <div class="forecast-icon">${icon}</div>
+      <strong>${daily.temperature_2m_max[index]}°</strong>
+      <small>${daily.temperature_2m_min[index]}° ${currentLanguage==="en"?"min":"குறைந்தபட்சம்"}</small>
+      <br>
+      <small>💧 ${rain} mm</small>
+    `;
+    container.appendChild(card);
+  });
 }
 
-// ========================================
-// START WEBSITE
-// ========================================
+// ==========================================
+// 6. CROP ADVISOR
+// ==========================================
 
-updateCropAdvice();
-loadWeather();
+function updateCropAdvice() {
+  const crop = document.getElementById("cropSelect").value;
+  const info = translations[currentLanguage].cropAdvice[crop];
 
-// Refresh weather every 15 minutes
-setInterval(loadWeather,15*60*1000);
+  document.getElementById("cropAdviceTitle").textContent = info.title;
+  document.getElementById("cropAdviceText").textContent = info.text;
 
-window.addEventListener("load",()=>{
-  setTimeout(()=>map.invalidateSize(),400);
+  const list = document.getElementById("cropAdviceList");
+  list.innerHTML = "";
+
+  info.tips.forEach(tip => {
+    const li = document.createElement("li");
+    li.textContent = tip;
+    list.appendChild(li);
+  });
+}
+
+// ==========================================
+// 7. AUTOMATIC STARTUP
+// ==========================================
+
+window.addEventListener("load", () => {
+  // Start automatically in Erode; no GPS permission required.
+  map.setView(erode,10);
+  applyLanguage();
+  updateCropAdvice();
+  loadWeather(erode[0],erode[1],"Erode, Tamil Nadu");
+
+  setTimeout(()=>map.invalidateSize(),300);
+
+  // Refresh weather every 15 minutes.
+  setInterval(()=>{
+    const center = map.getCenter();
+    const label = document.getElementById("locationLabel").textContent
+      .replace("📍 ","");
+    loadWeather(center.lat,center.lng,label);
+  },15*60*1000);
 });
 </script>
 
