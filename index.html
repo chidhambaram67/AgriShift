@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriShift - Erode Map</title>
+
+    <link rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f0f5ed;
+            text-align: center;
+        }
+
+        header {
+            background: #245c36;
+            color: white;
+            padding: 20px;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        #map {
+            height: 500px;
+            width: 90%;
+            margin: 25px auto;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>🌱 AgriShift</h1>
+        <p>Smart Agriculture Mapping System</p>
+        <p>Erode, Tamil Nadu</p>
+    </header>
+
+    <h2>Explore Erode Agriculture</h2>
+
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        var map = L.map('map').setView(
+            [11.3410, 77.7172], 12
+        );
+
+        L.tileLayer(
+            'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            {
+                attribution: '© OpenStreetMap contributors'
+            }
+        ).addTo(map);
+
+        L.marker([11.3410, 77.7172])
+            .addTo(map)
+            .bindPopup('Welcome to AgriShift - Erode!')
+            .openPopup();
+    </script>
+
+</body>
+</html>
