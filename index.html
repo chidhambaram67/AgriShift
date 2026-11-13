@@ -2,330 +2,1154 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AgriShift | Smart Agriculture Mapping</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgriShift | Field Shift - Erode Farm Advisor</title>
 
-  <link rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<!-- Leaflet Map -->
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<!-- Google Font -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f8f1;
-      color: #243528;
-    }
+<style>
+:root {
+  --green: #176b43;
+  --dark: #123b2b;
+  --lime: #b6df78;
+  --bg: #f4f7f1;
+  --white: #ffffff;
+  --text: #23372c;
+  --muted: #78877c;
+  --border: #e5ebe3;
+  --shadow: 0 8px 30px rgba(29, 64, 42, .07);
+}
 
-    header {
-      background: #174d32;
-      color: white;
-      padding: 20px 7%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 15px;
-    }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-    .logo {
-      font-size: 27px;
-      font-weight: bold;
-    }
+html { scroll-behavior: smooth; }
 
-    .logo span {
-      color: #b5e48c;
-    }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
 
-    nav a {
-      color: white;
-      text-decoration: none;
-      margin-left: 22px;
-      font-size: 15px;
-    }
+button, select, input {
+  font: inherit;
+}
 
-    .hero {
-      padding: 65px 7%;
-      background: linear-gradient(120deg, #e1f2d8, #f4f8e9);
-      text-align: center;
-    }
+button { cursor: pointer; }
 
-    .hero h1 {
-      font-size: 42px;
-      color: #174d32;
-      margin-bottom: 18px;
-    }
+.topbar {
+  background: var(--dark);
+  color: white;
+  padding: 17px 6%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
 
-    .hero p {
-      font-size: 18px;
-      color: #526b55;
-      line-height: 1.7;
-      max-width: 700px;
-      margin: auto;
-    }
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
-    .hero button {
-      margin-top: 25px;
-      background: #238348;
-      color: white;
-      border: none;
-      padding: 14px 28px;
-      border-radius: 7px;
-      font-size: 16px;
-      cursor: pointer;
-    }
+.brand-icon {
+  background: #b6df78;
+  color: #174a31;
+  width: 43px;
+  height: 43px;
+  border-radius: 13px;
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+}
 
-    .section {
-      padding: 45px 7%;
-    }
+.brand h1 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 24px;
+}
 
-    .section h2 {
-      text-align: center;
-      color: #174d32;
-      font-size: 30px;
-      margin-bottom: 12px;
-    }
+.brand p {
+  color: #b9d3c0;
+  font-size: 11px;
+  margin-top: 2px;
+}
 
-    .subtitle {
-      text-align: center;
-      color: #718071;
-      margin-bottom: 28px;
-    }
+.nav {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
 
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-      gap: 20px;
-    }
+.nav a {
+  color: #e0eee4;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+}
 
-    .card {
-      background: white;
-      padding: 25px;
-      border-radius: 12px;
-      text-align: center;
-      box-shadow: 0 3px 15px #173d3010;
-    }
+.nav a:hover { color: var(--lime); }
 
-    .card .emoji {
-      font-size: 32px;
-      margin-bottom: 12px;
-    }
+.hero {
+  background:
+    linear-gradient(110deg, rgba(14, 55, 37, .96), rgba(29, 103, 64, .88)),
+    url("https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1600");
+  background-size: cover;
+  background-position: center;
+  color: white;
+  padding: 62px 7%;
+}
 
-    .card h3 {
-      color: #238348;
-      margin-bottom: 10px;
-    }
+.hero-inner {
+  max-width: 1150px;
+  margin: auto;
+}
 
-    .card p {
-      color: #68766b;
-      line-height: 1.5;
-      font-size: 14px;
-    }
+.eyebrow {
+  color: #c4e998;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 800;
+  margin-bottom: 15px;
+}
 
-    #map {
-      height: 480px;
-      width: 100%;
-      border-radius: 12px;
-      border: 3px solid white;
-      box-shadow: 0 3px 15px #173d3015;
-    }
+.hero h2 {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(32px, 5vw, 52px);
+  max-width: 750px;
+  line-height: 1.12;
+}
 
-    .map-note {
-      margin-top: 12px;
-      font-size: 13px;
-      color: #68766b;
-      text-align: center;
-    }
+.hero p {
+  color: #d6e8d9;
+  max-width: 650px;
+  line-height: 1.8;
+  margin-top: 18px;
+  font-size: 15px;
+}
 
-    .map-button {
-      display: block;
-      margin: 18px auto;
-      background: #238348;
-      color: white;
-      padding: 12px 22px;
-      border: none;
-      border-radius: 7px;
-      cursor: pointer;
-      font-size: 15px;
-    }
+.hero-btn {
+  display: inline-block;
+  background: var(--lime);
+  color: #173e2a;
+  text-decoration: none;
+  border: 0;
+  border-radius: 8px;
+  padding: 13px 20px;
+  margin-top: 25px;
+  font-weight: 800;
+}
 
-    .about {
-      background: #e7f2e2;
-      text-align: center;
-      padding: 45px 10%;
-      line-height: 1.8;
-    }
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 35px 22px;
+}
 
-    .about h2 {
-      color: #174d32;
-      margin-bottom: 15px;
-    }
+.section {
+  margin-bottom: 42px;
+  scroll-margin-top: 20px;
+}
 
-    footer {
-      background: #174d32;
-      color: white;
-      text-align: center;
-      padding: 22px;
-      font-size: 14px;
-    }
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
 
-    @media (max-width: 600px) {
-      header {
-        justify-content: center;
-      }
+.section-heading h2 {
+  font-family: 'Outfit', sans-serif;
+  color: var(--dark);
+  font-size: 25px;
+}
 
-      nav a {
-        margin: 0 8px;
-        font-size: 13px;
-      }
+.section-heading p {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 6px;
+}
 
-      .hero h1 {
-        font-size: 30px;
-      }
+.tag {
+  background: #e5f1df;
+  color: #32734a;
+  padding: 7px 12px;
+  border-radius: 30px;
+  font-size: 11px;
+  font-weight: 800;
+}
 
-      #map {
-        height: 380px;
-      }
-    }
-  </style>
+.panel {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  padding: 23px;
+  box-shadow: var(--shadow);
+}
+
+.crop-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.crop-panel h3 {
+  color: var(--dark);
+  font-family: 'Outfit', sans-serif;
+  font-size: 18px;
+}
+
+.crop-panel p {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 5px;
+}
+
+.crop-select {
+  min-width: 230px;
+  background: #f8fbf6;
+  border: 1px solid #cddbc9;
+  border-radius: 9px;
+  padding: 13px;
+  color: var(--dark);
+  font-weight: 700;
+  outline-color: var(--green);
+}
+
+.crop-info {
+  margin-top: 17px;
+  background: #f0f7eb;
+  border-radius: 9px;
+  padding: 14px;
+  color: #45694d;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.weather-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.weather-card {
+  background: white;
+  padding: 23px;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.weather-card::after {
+  content: "";
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  background: #eff6e9;
+  border-radius: 50%;
+  right: -30px;
+  top: -30px;
+}
+
+.weather-icon {
+  width: 43px;
+  height: 43px;
+  border-radius: 12px;
+  background: #edf5e7;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  margin-bottom: 18px;
+}
+
+.weather-card h3 {
+  font-size: 14px;
+  color: #637469;
+}
+
+.weather-value {
+  font-family: 'Outfit', sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--dark);
+  margin-top: 9px;
+}
+
+.weather-unit {
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 6px;
+}
+
+.data-status {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+  margin-top: 15px;
+}
+
+.small-button {
+  background: white;
+  color: var(--green);
+  border: 1px solid #cbdacb;
+  border-radius: 7px;
+  padding: 9px 13px;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.strategy-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.strategy-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  padding: 23px;
+  box-shadow: var(--shadow);
+  border-top: 4px solid #79a66d;
+}
+
+.strategy-card:nth-child(2) {
+  border-top-color: #d2aa51;
+}
+
+.strategy-card:nth-child(3) {
+  border-top-color: #4d9a9b;
+}
+
+.strategy-number {
+  color: #83a184;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.strategy-card h3 {
+  font-family: 'Outfit', sans-serif;
+  color: var(--dark);
+  margin-top: 12px;
+  font-size: 20px;
+}
+
+.strategy-card p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+  margin-top: 10px;
+}
+
+.strategy-card ul {
+  list-style: none;
+  margin-top: 17px;
+}
+
+.strategy-card li {
+  font-size: 12px;
+  line-height: 1.8;
+  color: #4c6052;
+  margin-top: 7px;
+}
+
+.strategy-card li::before {
+  content: "✓";
+  color: var(--green);
+  font-weight: 800;
+  margin-right: 8px;
+}
+
+.strategy-note {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-top: 15px;
+}
+
+.map-panel {
+  background: white;
+  padding: 15px;
+  border-radius: 15px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.map-toolbar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.search-box {
+  flex: 1;
+  min-width: 200px;
+  border: 1px solid #dce6d9;
+  padding: 12px;
+  border-radius: 8px;
+  outline-color: var(--green);
+}
+
+.map-button {
+  background: #edf5e9;
+  color: var(--green);
+  border: 1px solid #d5e4d1;
+  padding: 11px 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.map-button:hover {
+  background: #dcebd5;
+}
+
+#map {
+  width: 100%;
+  height: 470px;
+  border-radius: 10px;
+  z-index: 1;
+}
+
+.map-legend {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 16px 5px 5px;
+}
+
+.legend-item {
+  font-size: 12px;
+  color: #586b5d;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.map-note {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 13px;
+  line-height: 1.7;
+}
+
+.crop-marker {
+  background: white;
+  border: 2px solid #398352;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 21px;
+  box-shadow: 0 3px 9px #0003;
+}
+
+footer {
+  background: var(--dark);
+  color: white;
+  padding: 35px 7%;
+  text-align: center;
+}
+
+footer h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 21px;
+}
+
+footer p {
+  color: #bdd3c2;
+  font-size: 12px;
+  margin-top: 9px;
+}
+
+.leaflet-popup-content {
+  line-height: 1.7;
+  min-width: 170px;
+}
+
+.leaflet-popup-content h3 {
+  color: #176b43;
+  margin-bottom: 6px;
+}
+
+@media(max-width: 760px) {
+  .weather-grid, .strategy-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nav {
+    gap: 13px;
+  }
+
+  .crop-panel {
+    align-items: stretch;
+  }
+
+  .crop-select {
+    width: 100%;
+  }
+
+  #map {
+    height: 390px;
+  }
+
+  .hero {
+    padding: 45px 6%;
+  }
+
+  .container {
+    padding: 25px 15px;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <header>
-    <div class="logo">🌱 Agri<span>Shift</span></div>
-    <nav>
-      <a href="#home">Home</a>
-      <a href="#features">Features</a>
-      <a href="#map-section">Map</a>
-      <a href="#about">About</a>
-    </nav>
-  </header>
-
-  <section class="hero" id="home">
-    <h1>Smart Agriculture Mapping System</h1>
-    <p>
-      Explore agricultural locations around Erode, Tamil Nadu.
-      Discover how interactive maps can support smarter
-      agriculture and better land information.
-    </p>
-    <button onclick="document.getElementById('map-section').scrollIntoView({behavior:'smooth'})">
-      Explore Erode Map
-    </button>
-  </section>
-
-  <section class="section" id="features">
-    <h2>Our Features</h2>
-    <p class="subtitle">Technology for smarter agriculture</p>
-
-    <div class="cards">
-      <div class="card">
-        <div class="emoji">🗺️</div>
-        <h3>Smart Mapping</h3>
-        <p>Explore locations using an interactive digital map.</p>
-      </div>
-
-      <div class="card">
-        <div class="emoji">🌾</div>
-        <h3>Crop Information</h3>
-        <p>Learn about crops and agricultural activities.</p>
-      </div>
-
-      <div class="card">
-        <div class="emoji">📍</div>
-        <h3>Location Markers</h3>
-        <p>View example agricultural locations on the map.</p>
-      </div>
-
-      <div class="card">
-        <div class="emoji">💡</div>
-        <h3>Smart Solutions</h3>
-        <p>Use digital technology to support agriculture.</p>
-      </div>
+<!-- HEADER -->
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-icon">🌱</div>
+    <div>
+      <h1>AgriShift</h1>
+      <p>SMART AGRICULTURE PLATFORM</p>
     </div>
-  </section>
+  </div>
 
-  <section class="section" id="map-section">
-    <h2>Erode Agriculture Map</h2>
-    <p class="subtitle">
-      Explore Erode and nearby areas of Tamil Nadu
+  <nav class="nav">
+    <a href="#home">Home</a>
+    <a href="#advisor">Farm Advisor</a>
+    <a href="#weather">NASA Data</a>
+    <a href="#strategies">Strategies</a>
+    <a href="#map-section">Map</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-inner">
+    <div class="eyebrow">🌍 ERODE · TAMIL NADU · INDIA</div>
+    <h2>Field Shift: Adapting Farms with NASA Data</h2>
+    <p>
+      Explore agricultural conditions, understand climate information
+      and compare sustainable crop rotation strategies.
+      Making agriculture smarter through geospatial technology.
     </p>
+    <a class="hero-btn" href="#advisor">Explore Farm Advisor →</a>
+  </div>
+</section>
+
+<main class="container">
+
+<!-- CROP SELECTOR -->
+<section class="section" id="advisor">
+  <div class="section-heading">
+    <div>
+      <h2>🌾 Erode Farm Advisor</h2>
+      <p>Select a crop to explore relevant farming strategies.</p>
+    </div>
+    <span class="tag">CROP ADVISOR</span>
+  </div>
+
+  <div class="panel">
+    <div class="crop-panel">
+      <div>
+        <h3>Choose Your Crop</h3>
+        <p>Select your preferred agricultural crop.</p>
+      </div>
+
+      <select class="crop-select" id="cropSelect"
+      onchange="updateCrop()">
+        <option value="Turmeric">🟡 Turmeric</option>
+        <option value="Paddy">🌾 Paddy</option>
+        <option value="Millet">🌿 Millet</option>
+      </select>
+    </div>
+
+    <div class="crop-info" id="cropInfo">
+      Turmeric: Monitor soil moisture, drainage and seasonal
+      rainfall while planning field operations.
+    </div>
+  </div>
+</section>
+
+<!-- NASA DATA -->
+<section class="section" id="weather">
+  <div class="section-heading">
+    <div>
+      <h2>☁️ NASA Weather & Soil Intelligence</h2>
+      <p>Environmental information for the Erode region.</p>
+    </div>
+    <span class="tag">NASA POWER DATA</span>
+  </div>
+
+  <div class="weather-grid">
+
+    <div class="weather-card">
+      <div class="weather-icon">🌡️</div>
+      <h3>Temperature</h3>
+      <div class="weather-value" id="temperature">--</div>
+      <div class="weather-unit">°C · T2M</div>
+    </div>
+
+    <div class="weather-card">
+      <div class="weather-icon">🌧️</div>
+      <h3>Corrected Rainfall</h3>
+      <div class="weather-value" id="rainfall">--</div>
+      <div class="weather-unit">mm/day · PRECTOTCORR</div>
+    </div>
+
+    <div class="weather-card">
+      <div class="weather-icon">🌱</div>
+      <h3>Top Soil Moisture</h3>
+      <div class="weather-value" id="moisture">--</div>
+      <div class="weather-unit">Fraction · GWETTOP</div>
+    </div>
+
+  </div>
+
+  <div class="data-status" id="dataStatus">
+    Connecting to NASA POWER data service...
+  </div>
+
+  <button class="small-button" onclick="loadNASAData()">
+    ↻ Refresh NASA Data
+  </button>
+
+  <p class="data-status">
+    Source: NASA POWER Daily Point API.
+    Values are averages of available daily estimates for the
+    selected recent period. NASA gridded data is not a direct
+    measurement from an individual farm. Soil wetness is a
+    modelled surface soil moisture indicator, not a laboratory
+    soil-water test.
+  </p>
+</section>
+
+<!-- ROTATION STRATEGIES -->
+<section class="section" id="strategies">
+  <div class="section-heading">
+    <div>
+      <h2>♻️ Crop Rotation Strategies</h2>
+      <p>Compare three approaches to sustainable agriculture.</p>
+    </div>
+    <span class="tag">STRATEGY COMPARISON</span>
+  </div>
+
+  <div class="strategy-grid">
+
+    <div class="strategy-card">
+      <div class="strategy-number">STRATEGY 01</div>
+      <h3>🌾 Baseline</h3>
+      <p>
+        Maintain the existing cropping system and current
+        field management practices.
+      </p>
+      <ul>
+        <li>Continue existing crop sequence.</li>
+        <li>Monitor field and soil conditions.</li>
+        <li>Maintain current irrigation practices.</li>
+        <li>Record seasonal crop performance.</li>
+      </ul>
+    </div>
+
+    <div class="strategy-card">
+      <div class="strategy-number">STRATEGY 02</div>
+      <h3>🌱 Soil Recovery</h3>
+      <p>
+        Improve soil health through suitable crop rotation
+        and organic matter management.
+      </p>
+      <ul>
+        <li>Consider suitable legume rotations.</li>
+        <li>Use compost and organic matter.</li>
+        <li>Monitor soil moisture.</li>
+        <li>Reduce unnecessary soil disturbance.</li>
+      </ul>
+    </div>
+
+    <div class="strategy-card">
+      <div class="strategy-number">STRATEGY 03</div>
+      <h3>🌦️ Climate Resilient</h3>
+      <p>
+        Adapt crop planning to rainfall patterns and
+        changing environmental conditions.
+      </p>
+      <ul>
+        <li>Consider drought-tolerant varieties.</li>
+        <li>Plan around seasonal rainfall.</li>
+        <li>Improve water-use efficiency.</li>
+        <li>Monitor climate information.</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <p class="strategy-note">
+    These are general strategy examples for project comparison.
+    Actual crop rotation decisions require local soil testing,
+    water availability, season and agricultural expert guidance.
+  </p>
+</section>
+
+<!-- MAP -->
+<section class="section" id="map-section">
+  <div class="section-heading">
+    <div>
+      <h2>🗺️ Smart Agriculture Map</h2>
+      <p>Explore Erode and illustrative agricultural reference points.</p>
+    </div>
+    <span class="tag">INTERACTIVE GIS</span>
+  </div>
+
+  <div class="map-panel">
+
+    <div class="map-toolbar">
+      <input class="search-box" id="mapSearch"
+      type="search"
+      placeholder="Search Erode, Turmeric, Paddy, Millet...">
+
+      <button class="map-button" onclick="searchMap()">🔍 Search</button>
+      <button class="map-button" onclick="resetMap()">📍 Erode</button>
+      <button class="map-button" onclick="locateUser()">◎ My Location</button>
+    </div>
 
     <div id="map"></div>
 
-    <button class="map-button" onclick="resetMap()">
-      📍 Back to Erode
-    </button>
+    <div class="map-legend">
+      <div class="legend-item">🏙️ Erode City</div>
+      <div class="legend-item">🟡 Turmeric</div>
+      <div class="legend-item">🌾 Paddy</div>
+      <div class="legend-item">🌿 Millet</div>
+      <div class="legend-item">💧 Water Reference</div>
+      <div class="legend-item">🛒 Market Reference</div>
+    </div>
+
+    <div class="map-note" id="coordinates">
+      Click anywhere on the map to view latitude and longitude.
+    </div>
 
     <p class="map-note">
-      Note: Map markers are illustrative sample locations,
-      not verified farm locations.
+      Important: Crop and resource markers are illustrative
+      demonstration points, not verified farm addresses,
+      official market coordinates or confirmed water facilities.
+      Map data © OpenStreetMap contributors.
     </p>
-  </section>
+  </div>
+</section>
 
-  <section class="about" id="about">
-    <h2>About AgriShift</h2>
-    <p>
-      AgriShift is a Smart Agriculture Mapping System project
-      designed to connect agriculture with digital mapping
-      technology. Our goal is to make agricultural location
-      information easier to explore and understand.
-    </p>
-  </section>
+</main>
 
-  <footer>
-    <p>© 2026 AgriShift | Smart Agriculture Mapping System</p>
-    <p>Developed for Erode, Tamil Nadu 🌱</p>
-  </footer>
+<!-- FOOTER -->
+<footer>
+  <h3>🌱 AgriShift</h3>
+  <p>Field Shift: Adapting Farms with NASA Data</p>
+  <p>Smart Agriculture Mapping System · Erode, Tamil Nadu</p>
+  <p>© 2026 AgriShift Project</p>
+</footer>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- LEAFLET -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <script>
-    const erode = [11.3410, 77.7172];
+<script>
 
-    const map = L.map('map').setView(erode, 11);
+// ======================================
+// 1. CROP ADVISOR
+// ======================================
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors',
-      maxZoom: 19
-    }).addTo(map);
+const cropDetails = {
+  Turmeric:
+    "🟡 Turmeric: Monitor soil moisture, drainage and seasonal rainfall. Consider suitable rotations and organic matter management.",
 
-    L.marker(erode)
+  Paddy:
+    "🌾 Paddy: Monitor rainfall, irrigation availability and water management. Consider suitable rotations based on local soil and water conditions.",
+
+  Millet:
+    "🌿 Millet: Monitor seasonal rainfall and soil moisture. Suitable drought-tolerant varieties may be considered based on local conditions."
+};
+
+function updateCrop() {
+  const crop = document.getElementById("cropSelect").value;
+
+  document.getElementById("cropInfo").textContent =
+    cropDetails[crop];
+
+  document.getElementById("mapSearch").value = crop;
+
+  const item = cropLocations.find(
+    location => location.crop === crop
+  );
+
+  if (item) {
+    map.setView(item.coords, 13);
+    item.marker.openPopup();
+  }
+}
+
+// ======================================
+// 2. LEAFLET INTERACTIVE MAP
+// ======================================
+
+const erode = [11.3410, 77.7172];
+
+const map = L.map("map").setView(erode, 11);
+
+const streetLayer = L.tileLayer(
+  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  {
+    maxZoom: 19,
+    attribution: "&copy; OpenStreetMap contributors"
+  }
+).addTo(map);
+
+const satelliteLayer = L.tileLayer(
+  "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+  {
+    attribution: "Tiles &copy; Esri"
+  }
+);
+
+const cityLayer = L.layerGroup().addTo(map);
+const cropLayer = L.layerGroup().addTo(map);
+const resourceLayer = L.layerGroup().addTo(map);
+
+// Custom map icons
+function createIcon(emoji) {
+  return L.divIcon({
+    className: "",
+    html: `<div class="crop-marker">${emoji}</div>`,
+    iconSize: [38, 38],
+    iconAnchor: [19, 19],
+    popupAnchor: [0, -18]
+  });
+}
+
+// Erode City
+L.marker(erode, {
+  icon: createIcon("🏙️")
+})
+.bindPopup(`
+  <h3>🏙️ Erode City</h3>
+  <b>District:</b> Erode<br>
+  <b>State:</b> Tamil Nadu<br>
+  <b>Country:</b> India<br>
+  <b>Latitude:</b> 11.3410<br>
+  <b>Longitude:</b> 77.7172
+`)
+.addTo(cityLayer);
+
+// Demonstration crop locations
+const cropLocations = [
+  {
+    crop: "Turmeric",
+    name: "Turmeric Sample Point",
+    area: "Erode area",
+    coords: [11.3650, 77.7350],
+    emoji: "🟡",
+    description: "Illustrative turmeric reference location."
+  },
+  {
+    crop: "Paddy",
+    name: "Paddy Sample Point",
+    area: "Bhavani area",
+    coords: [11.4450, 77.6800],
+    emoji: "🌾",
+    description: "Illustrative paddy reference location."
+  },
+  {
+    crop: "Millet",
+    name: "Millet Sample Point",
+    area: "Perundurai area",
+    coords: [11.2750, 77.5850],
+    emoji: "🌿",
+    description: "Illustrative millet reference location."
+  }
+];
+
+cropLocations.forEach(item => {
+
+  const marker = L.marker(item.coords, {
+    icon: createIcon(item.emoji)
+  });
+
+  marker.bindPopup(`
+    <h3>${item.emoji} ${item.name}</h3>
+    <b>Crop:</b> ${item.crop}<br>
+    <b>Area:</b> ${item.area}<br>
+    <b>Latitude:</b> ${item.coords[0]}<br>
+    <b>Longitude:</b> ${item.coords[1]}<br>
+    <p>${item.description}</p>
+  `);
+
+  marker.addTo(cropLayer);
+
+  item.marker = marker;
+});
+
+// Illustrative reference resources
+const resources = [
+  {
+    name: "Water Resource Reference",
+    coords: [11.3250, 77.7550],
+    emoji: "💧",
+    description: "Illustrative water-resource reference point."
+  },
+  {
+    name: "Agriculture Market Reference",
+    coords: [11.3500, 77.7000],
+    emoji: "🛒",
+    description: "Illustrative agricultural-market reference point."
+  }
+];
+
+resources.forEach(item => {
+  L.marker(item.coords, {
+    icon: createIcon(item.emoji)
+  })
+  .bindPopup(`
+    <h3>${item.emoji} ${item.name}</h3>
+    <p>${item.description}</p>
+    <b>Coordinates:</b> ${item.coords.join(", ")}
+  `)
+  .addTo(resourceLayer);
+});
+
+// Map layer selector
+L.control.layers(
+  {
+    "Street Map": streetLayer,
+    "Satellite View": satelliteLayer
+  },
+  {
+    "Erode City": cityLayer,
+    "Crop Locations": cropLayer,
+    "Resource References": resourceLayer
+  },
+  {
+    collapsed: false
+  }
+).addTo(map);
+
+// Scale
+L.control.scale({
+  metric: true,
+  imperial: false
+}).addTo(map);
+
+// Reset map
+function resetMap() {
+  map.setView(erode, 11);
+}
+
+// Map coordinate display
+map.on("click", function(event) {
+  document.getElementById("coordinates").textContent =
+    "Selected location: Latitude " +
+    event.latlng.lat.toFixed(5) +
+    " | Longitude " +
+    event.latlng.lng.toFixed(5);
+});
+
+// Map search
+function searchMap() {
+  const query = document.getElementById("mapSearch")
+    .value.trim().toLowerCase();
+
+  if (!query) {
+    resetMap();
+    return;
+  }
+
+  if ("erode".includes(query)) {
+    resetMap();
+    return;
+  }
+
+  const crop = cropLocations.find(item =>
+    item.crop.toLowerCase().includes(query) ||
+    item.name.toLowerCase().includes(query) ||
+    item.area.toLowerCase().includes(query)
+  );
+
+  if (crop) {
+    map.setView(crop.coords, 14);
+    crop.marker.openPopup();
+    return;
+  }
+
+  const resource = resources.find(item =>
+    item.name.toLowerCase().includes(query)
+  );
+
+  if (resource) {
+    map.setView(resource.coords, 14);
+    return;
+  }
+
+  alert("No matching sample location found.");
+}
+
+document.getElementById("mapSearch")
+.addEventListener("keydown", function(event) {
+  if (event.key === "Enter") searchMap();
+});
+
+// Optional browser location
+function locateUser() {
+  if (!navigator.geolocation) {
+    alert("Location is not supported by this browser.");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    position => {
+      const coords = [
+        position.coords.latitude,
+        position.coords.longitude
+      ];
+
+      map.setView(coords, 14);
+
+      L.marker(coords, {
+        icon: createIcon("📍")
+      })
       .addTo(map)
-      .bindPopup('<b>Erode</b><br>Tamil Nadu, India')
+      .bindPopup("Your current browser location.")
       .openPopup();
+    },
+    () => alert("Unable to access your location. Please allow location permission.")
+  );
+}
 
-    const sampleLocations = [
-      {
-        name: 'Sample Location 1',
-        coords: [11.3650, 77.7350]
-      },
-      {
-        name: 'Sample Location 2',
-        coords: [11.3000, 77.6900]
-      },
-      {
-        name: 'Sample Location 3',
-        coords: [11.3900, 77.6800]
-      }
-    ];
+// ======================================
+// 3. NASA POWER DATA
+// ======================================
 
-    sampleLocations.forEach(function(location) {
-      L.marker(location.coords)
-        .addTo(map)
-        .bindPopup('<b>' + location.name +
-          '</b><br>Illustrative agricultural location');
-    });
+async function loadNASAData() {
 
-    function resetMap() {
-      map.setView(erode, 11);
+  const status = document.getElementById("dataStatus");
+
+  status.textContent =
+    "⏳ Retrieving NASA POWER environmental data...";
+
+  document.getElementById("temperature").textContent = "--";
+  document.getElementById("rainfall").textContent = "--";
+  document.getElementById("moisture").textContent = "--";
+
+  // NASA POWER data can be delayed.
+  // Request a recent completed 7-day period.
+  const end = new Date();
+  end.setUTCDate(end.getUTCDate() - 3);
+
+  const start = new Date(end);
+  start.setUTCDate(start.getUTCDate() - 6);
+
+  function dateFormat(date) {
+    return date.getUTCFullYear() +
+      String(date.getUTCMonth() + 1).padStart(2, "0") +
+      String(date.getUTCDate()).padStart(2, "0");
+  }
+
+  const startDate = dateFormat(start);
+  const endDate = dateFormat(end);
+
+  const url =
+    "https://power.larc.nasa.gov/api/temporal/daily/point" +
+    "?parameters=T2M,PRECTOTCORR,GWETTOP" +
+    "&community=AG" +
+    "&longitude=77.7172" +
+    "&latitude=11.3410" +
+    "&start=" + startDate +
+    "&end=" + endDate +
+    "&format=JSON";
+
+  try {
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error("NASA service response error");
     }
-  </script>
+
+    const data = await response.json();
+
+    const parameters = data.properties.parameter;
+
+    function calculateAverage(series) {
+
+      const values = Object.values(series)
+        .filter(value =>
+          Number.isFinite(value) && value > -900
+        );
+
+      if (values.length === 0) return null;
+
+      return values.reduce((sum, value) =>
+        sum + value, 0) / values.length;
+    }
+
+    const temperature = calculateAverage(parameters.T2M);
+    const rainfall = calculateAverage(parameters.PRECTOTCORR);
+    const moisture = calculateAverage(parameters.GWETTOP);
+
+    document.getElementById("temperature").textContent =
+      temperature === null
+        ? "Unavailable"
+        : temperature.toFixed(1) + "°";
+
+    document.getElementById("rainfall").textContent =
+      rainfall === null
+        ? "Unavailable"
+        : rainfall.toFixed(1);
+
+    document.getElementById("moisture").textContent =
+      moisture === null
+        ? "Unavailable"
+        : moisture.toFixed(3);
+
+    status.textContent =
+      "✓ NASA POWER data retrieved for Erode. Daily average period: " +
+      startDate + " to " + endDate + ".";
+
+  } catch (error) {
+
+    document.getElementById("temperature").textContent = "N/A";
+    document.getElementById("rainfall").textContent = "N/A";
+    document.getElementById("moisture").textContent = "N/A";
+
+    status.textContent =
+      "NASA POWER data could not be retrieved. Check your internet connection or try refreshing later.";
+  }
+}
+
+// Load NASA information when the page opens
+loadNASAData();
+
+</script>
 
 </body>
 </html>
