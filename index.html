@@ -2,71 +2,330 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgriShift - Erode Map</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriShift | Smart Agriculture Mapping</title>
 
-    <link rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <link rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            background: #f0f5ed;
-            text-align: center;
-        }
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        header {
-            background: #245c36;
-            color: white;
-            padding: 20px;
-        }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f8f1;
+      color: #243528;
+    }
 
-        h1 {
-            margin: 0;
-        }
+    header {
+      background: #174d32;
+      color: white;
+      padding: 20px 7%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
 
-        #map {
-            height: 500px;
-            width: 90%;
-            margin: 25px auto;
-            border-radius: 12px;
-        }
-    </style>
+    .logo {
+      font-size: 27px;
+      font-weight: bold;
+    }
+
+    .logo span {
+      color: #b5e48c;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 22px;
+      font-size: 15px;
+    }
+
+    .hero {
+      padding: 65px 7%;
+      background: linear-gradient(120deg, #e1f2d8, #f4f8e9);
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 42px;
+      color: #174d32;
+      margin-bottom: 18px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: #526b55;
+      line-height: 1.7;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    .hero button {
+      margin-top: 25px;
+      background: #238348;
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 7px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .section {
+      padding: 45px 7%;
+    }
+
+    .section h2 {
+      text-align: center;
+      color: #174d32;
+      font-size: 30px;
+      margin-bottom: 12px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #718071;
+      margin-bottom: 28px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 3px 15px #173d3010;
+    }
+
+    .card .emoji {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .card h3 {
+      color: #238348;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      color: #68766b;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    #map {
+      height: 480px;
+      width: 100%;
+      border-radius: 12px;
+      border: 3px solid white;
+      box-shadow: 0 3px 15px #173d3015;
+    }
+
+    .map-note {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #68766b;
+      text-align: center;
+    }
+
+    .map-button {
+      display: block;
+      margin: 18px auto;
+      background: #238348;
+      color: white;
+      padding: 12px 22px;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .about {
+      background: #e7f2e2;
+      text-align: center;
+      padding: 45px 10%;
+      line-height: 1.8;
+    }
+
+    .about h2 {
+      color: #174d32;
+      margin-bottom: 15px;
+    }
+
+    footer {
+      background: #174d32;
+      color: white;
+      text-align: center;
+      padding: 22px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        justify-content: center;
+      }
+
+      nav a {
+        margin: 0 8px;
+        font-size: 13px;
+      }
+
+      .hero h1 {
+        font-size: 30px;
+      }
+
+      #map {
+        height: 380px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-    <header>
-        <h1>🌱 AgriShift</h1>
-        <p>Smart Agriculture Mapping System</p>
-        <p>Erode, Tamil Nadu</p>
-    </header>
+  <header>
+    <div class="logo">🌱 Agri<span>Shift</span></div>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#features">Features</a>
+      <a href="#map-section">Map</a>
+      <a href="#about">About</a>
+    </nav>
+  </header>
 
-    <h2>Explore Erode Agriculture</h2>
+  <section class="hero" id="home">
+    <h1>Smart Agriculture Mapping System</h1>
+    <p>
+      Explore agricultural locations around Erode, Tamil Nadu.
+      Discover how interactive maps can support smarter
+      agriculture and better land information.
+    </p>
+    <button onclick="document.getElementById('map-section').scrollIntoView({behavior:'smooth'})">
+      Explore Erode Map
+    </button>
+  </section>
+
+  <section class="section" id="features">
+    <h2>Our Features</h2>
+    <p class="subtitle">Technology for smarter agriculture</p>
+
+    <div class="cards">
+      <div class="card">
+        <div class="emoji">🗺️</div>
+        <h3>Smart Mapping</h3>
+        <p>Explore locations using an interactive digital map.</p>
+      </div>
+
+      <div class="card">
+        <div class="emoji">🌾</div>
+        <h3>Crop Information</h3>
+        <p>Learn about crops and agricultural activities.</p>
+      </div>
+
+      <div class="card">
+        <div class="emoji">📍</div>
+        <h3>Location Markers</h3>
+        <p>View example agricultural locations on the map.</p>
+      </div>
+
+      <div class="card">
+        <div class="emoji">💡</div>
+        <h3>Smart Solutions</h3>
+        <p>Use digital technology to support agriculture.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="map-section">
+    <h2>Erode Agriculture Map</h2>
+    <p class="subtitle">
+      Explore Erode and nearby areas of Tamil Nadu
+    </p>
 
     <div id="map"></div>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <button class="map-button" onclick="resetMap()">
+      📍 Back to Erode
+    </button>
 
-    <script>
-        var map = L.map('map').setView(
-            [11.3410, 77.7172], 12
-        );
+    <p class="map-note">
+      Note: Map markers are illustrative sample locations,
+      not verified farm locations.
+    </p>
+  </section>
 
-        L.tileLayer(
-            'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            {
-                attribution: '© OpenStreetMap contributors'
-            }
-        ).addTo(map);
+  <section class="about" id="about">
+    <h2>About AgriShift</h2>
+    <p>
+      AgriShift is a Smart Agriculture Mapping System project
+      designed to connect agriculture with digital mapping
+      technology. Our goal is to make agricultural location
+      information easier to explore and understand.
+    </p>
+  </section>
 
-        L.marker([11.3410, 77.7172])
-            .addTo(map)
-            .bindPopup('Welcome to AgriShift - Erode!')
-            .openPopup();
-    </script>
+  <footer>
+    <p>© 2026 AgriShift | Smart Agriculture Mapping System</p>
+    <p>Developed for Erode, Tamil Nadu 🌱</p>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+    const erode = [11.3410, 77.7172];
+
+    const map = L.map('map').setView(erode, 11);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors',
+      maxZoom: 19
+    }).addTo(map);
+
+    L.marker(erode)
+      .addTo(map)
+      .bindPopup('<b>Erode</b><br>Tamil Nadu, India')
+      .openPopup();
+
+    const sampleLocations = [
+      {
+        name: 'Sample Location 1',
+        coords: [11.3650, 77.7350]
+      },
+      {
+        name: 'Sample Location 2',
+        coords: [11.3000, 77.6900]
+      },
+      {
+        name: 'Sample Location 3',
+        coords: [11.3900, 77.6800]
+      }
+    ];
+
+    sampleLocations.forEach(function(location) {
+      L.marker(location.coords)
+        .addTo(map)
+        .bindPopup('<b>' + location.name +
+          '</b><br>Illustrative agricultural location');
+    });
+
+    function resetMap() {
+      map.setView(erode, 11);
+    }
+  </script>
 
 </body>
 </html>
