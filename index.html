@@ -16,30 +16,21 @@
   --light:#eef6ef;
   --gold:#e5b94c;
   --muted:#718078;
-  --white:#fff;
 }
 *{box-sizing:border-box}
 body{
-  margin:0;
-  font-family:Inter,Arial,sans-serif;
-  background:#f5f8f5;
-  color:#20372b;
+  margin:0;font-family:Inter,Arial,sans-serif;
+  background:#f5f8f5;color:#20372b;
 }
 header{
-  background:var(--dark);
-  color:white;
-  padding:17px 5%;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  flex-wrap:wrap;
-  gap:15px;
+  background:var(--dark);color:white;padding:17px 5%;
+  display:flex;justify-content:space-between;
+  align-items:center;flex-wrap:wrap;gap:15px;
 }
 .brand{display:flex;align-items:center;gap:12px}
 .logo{
   width:43px;height:43px;border-radius:13px;
-  display:grid;place-items:center;
-  background:#2b8054;font-size:22px;
+  display:grid;place-items:center;background:#2b8054;font-size:22px;
 }
 .brand h2{font-size:19px;margin:0}
 .brand small{color:#c4dfcd}
@@ -60,26 +51,21 @@ main{max-width:1250px;margin:auto;padding:25px 20px}
 .section{margin-top:30px}
 .section-head{
   display:flex;justify-content:space-between;
-  align-items:center;gap:12px;flex-wrap:wrap;
-  margin-bottom:16px;
+  align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px;
 }
 .section-head h2{font-size:22px;margin:0}
 .muted{color:var(--muted);font-size:13px}
 .cards{
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:15px;
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;
 }
 .card{
-  background:white;border:1px solid #e3ebe4;
-  border-radius:15px;padding:19px;
-  box-shadow:0 4px 15px #163d2510;
+  background:white;border:1px solid #e3ebe4;border-radius:15px;
+  padding:19px;box-shadow:0 4px 15px #163d2510;
 }
 .card-top{display:flex;justify-content:space-between;align-items:center}
 .card-icon{
   width:40px;height:40px;border-radius:12px;
-  display:grid;place-items:center;
-  background:#e8f4eb;color:var(--green);
+  display:grid;place-items:center;background:#e8f4eb;color:var(--green);
 }
 .card h3{font-size:14px;color:#64756a;margin:14px 0 8px}
 .metric{font-size:29px;font-weight:750;color:#173f2b}
@@ -94,8 +80,8 @@ main{max-width:1250px;margin:auto;padding:25px 20px}
   display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:9px;
 }
 .day{
-  background:white;border:1px solid #e3ebe4;
-  border-radius:12px;padding:13px 7px;text-align:center;
+  background:white;border:1px solid #e3ebe4;border-radius:12px;
+  padding:13px 7px;text-align:center;
 }
 .day strong{display:block;font-size:13px}
 .day .weather-icon{font-size:22px;margin:10px 0;color:#d39c30}
@@ -116,30 +102,24 @@ main{max-width:1250px;margin:auto;padding:25px 20px}
 .info-grid .card p{font-size:13px;line-height:1.6;color:#64756a}
 footer{
   margin-top:35px;padding:25px;text-align:center;
-  background:#123c2b;color:#d4e5d8;
-  font-size:12px;line-height:1.8;
+  background:#123c2b;color:#d4e5d8;font-size:12px;line-height:1.8;
 }
 
-/* GLOBAL MAP */
-.map-toolbar{
-  display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;
-}
+/* MAP DESIGN */
+.map-toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
 .map-search-wrap{position:relative;flex:1;min-width:230px}
 .map-search-wrap input{
-  width:100%;padding:13px 16px;
-  border:1px solid #d5e0d7;background:white;
-  border-radius:11px;outline:none;
+  width:100%;padding:13px 16px;border:1px solid #d5e0d7;
+  background:white;border-radius:11px;outline:none;
 }
 .map-search-wrap input:focus{
-  border-color:#176b43;
-  box-shadow:0 0 0 3px #176b4320;
+  border-color:#176b43;box-shadow:0 0 0 3px #176b4320;
 }
 #mapResults{
-  display:none;position:absolute;top:calc(100% + 7px);
-  left:0;width:100%;background:white;
-  border:1px solid #e0e9e1;border-radius:12px;
-  box-shadow:0 8px 25px #0002;z-index:1200;
-  max-height:280px;overflow-y:auto;
+  display:none;position:absolute;top:calc(100% + 7px);left:0;
+  width:100%;background:white;border:1px solid #e0e9e1;
+  border-radius:12px;box-shadow:0 8px 25px #0002;
+  z-index:1200;max-height:280px;overflow-y:auto;
 }
 .map-result{
   display:block;width:100%;padding:12px 15px;
@@ -159,8 +139,7 @@ footer{
   position:absolute;bottom:14px;left:14px;z-index:500;
   padding:10px 14px;background:rgba(255,255,255,.96);
   border-radius:10px;font-size:12px;font-weight:700;
-  color:#176b43;box-shadow:0 3px 12px #0002;
-  pointer-events:none;
+  color:#176b43;box-shadow:0 3px 12px #0002;pointer-events:none;
 }
 .leaflet-control-zoom,.leaflet-control-layers{
   border:0!important;border-radius:11px!important;
@@ -176,9 +155,7 @@ footer{
 }
 .leaflet-control-layers label{margin:7px 4px}
 .leaflet-popup-content-wrapper{border-radius:13px!important}
-.leaflet-popup-content{
-  font-family:Arial,sans-serif;font-size:13px;line-height:1.7;
-}
+.leaflet-popup-content{font-family:Arial,sans-serif;font-size:13px;line-height:1.7}
 .leaflet-popup-content strong{color:#176b43;font-size:15px}
 .legend{
   background:white;padding:14px;border:1px solid #e3ebe4;
@@ -215,7 +192,6 @@ footer{
 </head>
 
 <body>
-
 <header>
   <div class="brand">
     <div class="logo"><i class="fa-solid fa-seedling"></i></div>
@@ -224,7 +200,6 @@ footer{
       <small>Erode Farm Climate Advisor</small>
     </div>
   </div>
-
   <div class="header-right">
     <label for="cropSelect">Select crop:</label>
     <select id="cropSelect">
@@ -239,7 +214,6 @@ footer{
 </header>
 
 <main>
-
 <section class="hero">
   <div>
     <h1>Field Shift: Adapting Farms with NASA Data</h1>
@@ -252,9 +226,7 @@ footer{
       Erode, Tamil Nadu, India
     </span>
   </div>
-  <div class="hero-tag">
-    <i class="fa-solid fa-leaf"></i> Smart Agriculture
-  </div>
+  <div class="hero-tag"><i class="fa-solid fa-leaf"></i> Smart Agriculture</div>
 </section>
 
 <section class="section">
@@ -262,54 +234,30 @@ footer{
     <h2><i class="fa-solid fa-cloud-sun"></i> Local Climate Dashboard</h2>
     <span id="weatherStatus" class="status loading">Loading weather...</span>
   </div>
-
   <div class="cards">
     <div class="card">
-      <div class="card-top">
-        <div class="card-icon"><i class="fa-solid fa-temperature-half"></i></div>
-        <span class="status">Model data</span>
-      </div>
-      <h3>Air Temperature</h3>
-      <div class="metric" id="temperature">-- °C</div>
+      <div class="card-top"><div class="card-icon"><i class="fa-solid fa-temperature-half"></i></div><span class="status">Model data</span></div>
+      <h3>Air Temperature</h3><div class="metric" id="temperature">-- °C</div>
       <small>At approximately 2 metres</small>
     </div>
-
     <div class="card">
-      <div class="card-top">
-        <div class="card-icon"><i class="fa-solid fa-droplet"></i></div>
-        <span class="status">Model data</span>
-      </div>
-      <h3>Relative Humidity</h3>
-      <div class="metric" id="humidity">-- %</div>
+      <div class="card-top"><div class="card-icon"><i class="fa-solid fa-droplet"></i></div><span class="status">Model data</span></div>
+      <h3>Relative Humidity</h3><div class="metric" id="humidity">-- %</div>
       <small>Atmospheric humidity</small>
     </div>
-
     <div class="card">
-      <div class="card-top">
-        <div class="card-icon"><i class="fa-solid fa-cloud-rain"></i></div>
-        <span class="status">Model data</span>
-      </div>
-      <h3>Current Precipitation</h3>
-      <div class="metric" id="rainfall">-- mm</div>
+      <div class="card-top"><div class="card-icon"><i class="fa-solid fa-cloud-rain"></i></div><span class="status">Model data</span></div>
+      <h3>Current Precipitation</h3><div class="metric" id="rainfall">-- mm</div>
       <small>Latest available current value</small>
     </div>
-
     <div class="card">
-      <div class="card-top">
-        <div class="card-icon"><i class="fa-solid fa-water"></i></div>
-        <span class="status">Model estimate</span>
-      </div>
-      <h3>Surface Soil Moisture</h3>
-      <div class="metric" id="moisture">--</div>
+      <div class="card-top"><div class="card-icon"><i class="fa-solid fa-water"></i></div><span class="status">Model estimate</span></div>
+      <h3>Surface Soil Moisture</h3><div class="metric" id="moisture">--</div>
       <small>Volumetric water content, 0–7 cm</small>
     </div>
   </div>
-
   <p id="updated" class="muted">Waiting for weather data...</p>
-  <p class="muted">
-    Weather source: Open-Meteo. Soil moisture is a gridded model estimate,
-    not a direct farm sensor measurement.
-  </p>
+  <p class="muted">Weather source: Open-Meteo. Soil moisture is a gridded model estimate, not a direct farm sensor measurement.</p>
 </section>
 
 <section class="section">
@@ -317,9 +265,7 @@ footer{
     <h2><i class="fa-solid fa-calendar-days"></i> 7-Day Weather Outlook</h2>
     <span class="muted">Erode forecast</span>
   </div>
-  <div class="forecast" id="forecast">
-    <div class="day">Loading forecast...</div>
-  </div>
+  <div class="forecast" id="forecast"><div class="day">Loading forecast...</div></div>
 </section>
 
 <section class="section">
@@ -339,7 +285,6 @@ footer{
     <h2><i class="fa-solid fa-arrows-rotate"></i> Crop Rotation Strategy Comparison</h2>
     <span class="muted">Three farming approaches</span>
   </div>
-
   <div class="strategy-grid">
     <div class="card strategy">
       <span class="tag">01 · REFERENCE APPROACH</span>
@@ -352,7 +297,6 @@ footer{
         <li>Use as the comparison reference</li>
       </ul>
     </div>
-
     <div class="card strategy">
       <span class="tag">02 · SOIL RECOVERY</span>
       <h3>Soil Recovery (Pulses)</h3>
@@ -364,7 +308,6 @@ footer{
         <li>Check season, soil and water availability</li>
       </ul>
     </div>
-
     <div class="card strategy">
       <span class="tag">03 · CLIMATE RESILIENT</span>
       <h3>Climate Resilient (Millets)</h3>
@@ -377,47 +320,28 @@ footer{
       </ul>
     </div>
   </div>
-  <p class="muted">
-    These are planning strategies, not guaranteed yield or profit predictions.
-  </p>
+  <p class="muted">These are planning strategies, not guaranteed yield or profit predictions.</p>
 </section>
 
-<!-- ONE GLOBAL MAP -->
+<!-- GLOBAL MAP -->
 <section class="section">
   <div class="section-head">
     <h2><i class="fa-solid fa-map-location-dot"></i> AgriShift Global Agricultural Map</h2>
     <span class="muted">Explore locations worldwide</span>
   </div>
-
   <div class="map-toolbar">
     <div class="map-search-wrap">
-      <input id="mapSearch" type="search"
-        placeholder="Search any city, village, country or address..."
-        autocomplete="off">
+      <input id="mapSearch" type="search" placeholder="Search any city, village, country or address..." autocomplete="off">
       <div id="mapResults"></div>
     </div>
-
-    <button class="action" onclick="searchMap()">
-      <i class="fa-solid fa-magnifying-glass"></i> Search
-    </button>
-
-    <button class="action secondary" onclick="resetMap()">
-      <i class="fa-solid fa-house"></i> Erode
-    </button>
-
-    <button class="action secondary" onclick="locateMe()">
-      <i class="fa-solid fa-location-crosshairs"></i> My Location
-    </button>
+    <button class="action" onclick="searchMap()"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+    <button class="action secondary" onclick="resetMap()"><i class="fa-solid fa-house"></i> Erode</button>
+    <button class="action secondary" onclick="locateMe()"><i class="fa-solid fa-location-crosshairs"></i> My Location</button>
   </div>
-
   <div class="map-container">
     <div id="map"></div>
-    <div class="map-caption">
-      <i class="fa-solid fa-earth-asia"></i>
-      Global Map · English Search
-    </div>
+    <div class="map-caption"><i class="fa-solid fa-earth-asia"></i> Global Map · English Search</div>
   </div>
-
   <div class="legend">
     <span><i class="dot turmeric"></i> Turmeric reference</span>
     <span><i class="dot paddy"></i> Paddy reference</span>
@@ -425,18 +349,11 @@ footer{
     <span><i class="dot millet"></i> Millet reference</span>
     <span><i class="dot water"></i> Water features</span>
   </div>
-
-  <p class="muted">
-    Global search powered by Photon. Map tiles by Esri.
-    Crop locations are illustrative regional references, not verified farms.
-  </p>
+  <p class="muted">Global search powered by Photon. Street map by OpenStreetMap. Crop locations are illustrative regional references, not verified farms.</p>
 </section>
 
 <section class="section">
-  <div class="section-head">
-    <h2><i class="fa-solid fa-circle-info"></i> Data and Method</h2>
-  </div>
-
+  <div class="section-head"><h2><i class="fa-solid fa-circle-info"></i> Data and Method</h2></div>
   <div class="info-grid">
     <div class="card">
       <h3>Weather information</h3>
@@ -452,35 +369,33 @@ footer{
     </div>
   </div>
 </section>
-
 </main>
 
 <footer>
   <strong>AgriShift · Erode Farm Climate Advisor</strong><br>
   Field Shift: Adapting Farms with NASA Data<br>
-  Weather: Open-Meteo · Map: Esri · Search: Photon · © OpenStreetMap contributors<br>
+  Weather: Open-Meteo · Map: OpenStreetMap · Search: Photon<br>
   Educational climate information, not a substitute for local agricultural advice.
 </footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
 <script>
 // ========================================
 // WEATHER DASHBOARD
 // ========================================
 
-const $ = id => document.getElementById(id);
+const $=id=>document.getElementById(id);
 
-const WEATHER_URL =
-"https://api.open-meteo.com/v1/forecast" +
-"?latitude=11.3410&longitude=77.7172" +
-"&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,rain,weather_code,wind_speed_10m" +
-"&hourly=precipitation,soil_moisture_0_to_7cm,soil_moisture_7_to_28cm,soil_moisture_28_to_100cm" +
-"&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code" +
+const WEATHER_URL=
+"https://api.open-meteo.com/v1/forecast"+
+"?latitude=11.3410&longitude=77.7172"+
+"&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,rain,weather_code,wind_speed_10m"+
+"&hourly=precipitation,soil_moisture_0_to_7cm,soil_moisture_7_to_28cm,soil_moisture_28_to_100cm"+
+"&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code"+
 "&forecast_days=7&timezone=Asia%2FKolkata";
 
 function displayNumber(value,digits=1){
-  return Number.isFinite(value) ? value.toFixed(digits) : "--";
+  return Number.isFinite(value)?value.toFixed(digits):"--";
 }
 
 function weatherIcon(code){
@@ -497,40 +412,24 @@ async function loadWeather(){
   const status=$("weatherStatus");
   status.textContent="Updating...";
   status.className="status loading";
-
   try{
     const response=await fetch(WEATHER_URL,{cache:"no-store"});
-    if(!response.ok)throw new Error("Weather service unavailable");
-
+    if(!response.ok)throw new Error("Weather unavailable");
     const data=await response.json();
     const current=data.current;
     const hourly=data.hourly;
+    if(!current||!hourly)throw new Error("Incomplete data");
 
-    if(!current||!hourly)throw new Error("Incomplete weather data");
+    $("temperature").textContent=displayNumber(current.temperature_2m)+" °C";
+    $("humidity").textContent=displayNumber(current.relative_humidity_2m,0)+" %";
+    $("rainfall").textContent=displayNumber(current.precipitation,1)+" mm";
 
-    $("temperature").textContent=
-      displayNumber(current.temperature_2m)+" °C";
-
-    $("humidity").textContent=
-      displayNumber(current.relative_humidity_2m,0)+" %";
-
-    $("rainfall").textContent=
-      displayNumber(current.precipitation,1)+" mm";
-
-    const currentHourIndex=hourly.time.findIndex(
-      time=>time===current.time
-    );
-
-    const index=currentHourIndex>=0
-      ?currentHourIndex
-      :hourly.time.length-1;
-
+    const currentIndex=hourly.time.findIndex(t=>t===current.time);
+    const index=currentIndex>=0?currentIndex:hourly.time.length-1;
     const moisture=hourly.soil_moisture_0_to_7cm[index];
 
-    $("moisture").textContent=
-      Number.isFinite(moisture)
-      ?(moisture*100).toFixed(1)+" %"
-      :"N/A";
+    $("moisture").textContent=Number.isFinite(moisture)
+      ?(moisture*100).toFixed(1)+" %":"N/A";
 
     $("updated").textContent=
       "Weather model time: "+current.time.replace("T"," ")+
@@ -538,30 +437,23 @@ async function loadWeather(){
 
     status.textContent="Weather data loaded";
     status.className="status";
-
     renderForecast(data.daily);
-
   }catch(error){
     status.textContent="Data unavailable";
     status.className="status error";
-    $("updated").textContent=
-      "Could not retrieve data. Check your internet and try again.";
+    $("updated").textContent="Could not retrieve data. Check your internet and try again.";
   }
 }
 
 function renderForecast(daily){
   if(!daily||!daily.time)return;
-
   $("forecast").innerHTML=daily.time.map((date,i)=>{
     const day=new Date(date+"T12:00:00");
     const dayName=day.toLocaleDateString("en-IN",{weekday:"short"});
-
     return `
       <div class="day">
         <strong>${dayName}</strong>
-        <div class="weather-icon">
-          <i class="fa-solid ${weatherIcon(daily.weather_code[i])}"></i>
-        </div>
+        <div class="weather-icon"><i class="fa-solid ${weatherIcon(daily.weather_code[i])}"></i></div>
         <strong>${displayNumber(daily.temperature_2m_max[i],0)}°</strong>
         <small>${displayNumber(daily.temperature_2m_min[i],0)}° min</small>
         <p><small>${displayNumber(daily.precipitation_sum[i],1)} mm rain</small></p>
@@ -577,47 +469,32 @@ const cropInfo={
   Turmeric:{
     heading:"Turmeric farming in Erode",
     advice:"Turmeric needs suitable soil, reliable water supply and a suitable growing season. Monitor rainfall, drainage and soil moisture before making irrigation decisions.",
-    tips:[
-      "Check soil drainage and field preparation.",
-      "Avoid waterlogging.",
-      "Use locally recommended varieties and planting dates."
-    ]
+    tips:["Check soil drainage and field preparation.","Avoid waterlogging.","Use locally recommended varieties and planting dates."]
   },
   Paddy:{
     heading:"Paddy farming in Erode",
     advice:"Paddy planning depends on irrigation access, rainfall timing and water availability. Use weather forecasts to plan field operations.",
-    tips:[
-      "Review reservoir and irrigation availability.",
-      "Monitor rainfall and field water levels.",
-      "Consider locally recommended water-saving practices."
-    ]
+    tips:["Review reservoir and irrigation availability.","Monitor rainfall and field water levels.","Consider locally recommended water-saving practices."]
   },
   Sugarcane:{
     heading:"Sugarcane farming in Erode",
     advice:"Sugarcane is a long-duration crop. Water availability, soil conditions and seasonal weather should be considered throughout its growth.",
-    tips:[
-      "Monitor irrigation and soil moisture.",
-      "Use suitable mulching and soil management practices.",
-      "Check local recommendations for crop duration."
-    ]
+    tips:["Monitor irrigation and soil moisture.","Use suitable mulching and soil management practices.","Check local recommendations for crop duration."]
   }
 };
 
 function updateCropAdvice(){
   const crop=$("cropSelect").value;
   const info=cropInfo[crop];
-
   $("cropTitle").textContent=crop+" selected";
   $("cropHeading").textContent=info.heading;
   $("cropAdvice").textContent=info.advice;
-  $("cropTips").innerHTML=
-    "<ul>"+info.tips.map(t=>"<li>"+t+"</li>").join("")+"</ul>";
+  $("cropTips").innerHTML="<ul>"+info.tips.map(t=>"<li>"+t+"</li>").join("")+"</ul>";
 }
-
 $("cropSelect").addEventListener("change",updateCropAdvice);
 
 // ========================================
-// GLOBAL MAP - ONLY ONE MAP INSTANCE
+// GLOBAL MAP - ONE MAP ONLY
 // ========================================
 
 const ERODE=[11.3410,77.7172];
@@ -630,27 +507,26 @@ const map=L.map("map",{
   worldCopyJump:false
 });
 
-// Keep one world visible and prevent repeated tile copies
 const worldBounds=L.latLngBounds(
   L.latLng(-85,-180),
   L.latLng(85,180)
 );
-
 map.setMaxBounds(worldBounds);
 map.options.maxBoundsViscosity=1.0;
 
-// English-friendly street map
+// NORMAL OPENSTREETMAP STREET MAP
 const street=L.tileLayer(
-  "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
+  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
   {
+    subdomains:["a","b","c"],
     minZoom:2,
     maxZoom:19,
     noWrap:true,
-    attribution:"Tiles &copy; Esri and its data providers"
+    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   }
 );
 
-// Satellite view
+// SATELLITE VIEW
 const satellite=L.tileLayer(
   "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
   {
@@ -670,7 +546,7 @@ L.control.scale({
 }).addTo(map);
 
 // ========================================
-// ERODE CROP REFERENCE LOCATIONS
+// ERODE AGRICULTURAL REFERENCE MARKERS
 // ========================================
 
 const cropLocations=[
@@ -693,26 +569,20 @@ const cropLayers={
 function makeCropIcon(color){
   return L.divIcon({
     className:"",
-    html:`<div style="
-      width:20px;height:20px;background:${color};
-      border:3px solid white;border-radius:50%;
-      box-shadow:0 2px 8px #0005;
-    "></div>`,
+    html:`<div style="width:20px;height:20px;background:${color};border:3px solid white;border-radius:50%;box-shadow:0 2px 8px #0005"></div>`,
     iconSize:[20,20],
     iconAnchor:[10,10]
   });
 }
 
 cropLocations.forEach(place=>{
-  L.marker(place.coords,{
-    icon:makeCropIcon(place.color)
-  })
-  .bindPopup(`
-    <strong>${place.name}</strong><br>
-    Crop reference: ${place.crop}<br>
-    <small>Illustrative regional location, not a verified farm survey.</small>
-  `)
-  .addTo(cropLayers[place.crop]);
+  L.marker(place.coords,{icon:makeCropIcon(place.color)})
+    .bindPopup(
+      "<strong>"+place.name+"</strong><br>"+
+      "Crop reference: "+place.crop+
+      "<br><small>Illustrative regional location, not a verified farm survey.</small>"
+    )
+    .addTo(cropLayers[place.crop]);
 });
 
 // One Erode marker
@@ -722,7 +592,6 @@ L.marker(ERODE)
 
 // Water reference points
 const waterLayer=L.layerGroup();
-
 [
   {name:"Bhavani River reference",coords:[11.445,77.680]},
   {name:"Cauvery River reference",coords:[11.070,77.880]}
@@ -732,16 +601,12 @@ const waterLayer=L.layerGroup();
     .addTo(waterLayer);
 });
 
-// Add crop and water layers
 Object.values(cropLayers).forEach(layer=>layer.addTo(map));
 waterLayer.addTo(map);
 
-// ONE layer selector only
+// ONE LAYER SELECTOR
 L.control.layers(
-  {
-    "Street Map":street,
-    "Satellite View":satellite
-  },
+  {"Street Map":street,"Satellite View":satellite},
   {
     "Turmeric":cropLayers.Turmeric,
     "Paddy":cropLayers.Paddy,
@@ -749,14 +614,11 @@ L.control.layers(
     "Millet":cropLayers.Millet,
     "Water Features":waterLayer
   },
-  {
-    collapsed:true,
-    position:"topright"
-  }
+  {collapsed:true,position:"topright"}
 ).addTo(map);
 
 // ========================================
-// WORLDWIDE PLACE SEARCH
+// WORLDWIDE LOCATION SEARCH
 // ========================================
 
 const searchInput=$("mapSearch");
@@ -764,7 +626,6 @@ const resultsBox=$("mapResults");
 const searchLayer=L.layerGroup().addTo(map);
 
 let searchResults=[];
-let searchBusy=false;
 let searchTimer=null;
 let searchController=null;
 
@@ -779,17 +640,12 @@ function showSearchMessage(message){
 
 function escapeMapText(value){
   return String(value).replace(/[&<>"']/g,character=>({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#39;"
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
   })[character]);
 }
 
 async function searchMap(){
   const query=searchInput.value.trim();
-
   if(query.length<2){
     showSearchMessage("Enter at least two letters.");
     return;
@@ -797,25 +653,17 @@ async function searchMap(){
 
   if(searchController)searchController.abort();
   searchController=new AbortController();
-
-  searchBusy=true;
   showSearchMessage("Searching worldwide locations...");
 
   try{
-    const url=
-      "https://photon.komoot.io/api/"+
-      "?q="+encodeURIComponent(query)+
-      "&lang=en&limit=8";
+    const url="https://photon.komoot.io/api/?q="+
+      encodeURIComponent(query)+"&lang=en&limit=8";
 
-    const response=await fetch(url,{
-      signal:searchController.signal
-    });
-
+    const response=await fetch(url,{signal:searchController.signal});
     if(!response.ok)throw new Error("Search unavailable");
 
     const data=await response.json();
     searchResults=data.features||[];
-
     resultsBox.replaceChildren();
 
     if(searchResults.length===0){
@@ -826,12 +674,8 @@ async function searchMap(){
     searchResults.forEach((feature,index)=>{
       const p=feature.properties||{};
       const title=p.name||"Unnamed location";
-
-      const details=[
-        p.city,p.district,p.state,p.country
-      ].filter((value,i,array)=>
-        value&&array.indexOf(value)===i&&value!==title
-      );
+      const details=[p.city,p.district,p.state,p.country]
+        .filter((v,i,a)=>v&&a.indexOf(v)===i&&v!==title);
 
       const button=document.createElement("button");
       button.type="button";
@@ -844,26 +688,18 @@ async function searchMap(){
       small.textContent=details.join(", ")||"Location result";
 
       button.append(strong,small);
-
-      button.addEventListener("click",()=>{
-        selectSearchResult(index);
-      });
-
+      button.addEventListener("click",()=>selectSearchResult(index));
       resultsBox.appendChild(button);
     });
 
     resultsBox.style.display="block";
-
   }catch(error){
     if(error.name!=="AbortError"){
       showSearchMessage("Search failed. Check your internet and try again.");
     }
-  }finally{
-    searchBusy=false;
   }
 }
 
-// Select a worldwide search result
 function selectSearchResult(index){
   const feature=searchResults[index];
   if(!feature)return;
@@ -871,15 +707,11 @@ function selectSearchResult(index){
   const coordinates=feature.geometry.coordinates;
   const longitude=coordinates[0];
   const latitude=coordinates[1];
-
   const p=feature.properties||{};
   const title=p.name||"Selected location";
 
-  const details=[
-    p.city,p.district,p.state,p.country
-  ].filter((value,i,array)=>
-    value&&array.indexOf(value)===i&&value!==title
-  );
+  const details=[p.city,p.district,p.state,p.country]
+    .filter((v,i,a)=>v&&a.indexOf(v)===i&&v!==title);
 
   searchLayer.clearLayers();
 
@@ -891,30 +723,25 @@ function selectSearchResult(index){
     )
     .openPopup();
 
-  map.flyTo([latitude,longitude],14,{
-    duration:1.2
-  });
-
+  map.flyTo([latitude,longitude],14,{duration:1.2});
   searchInput.value=title;
   resultsBox.style.display="none";
 }
 
-// Search button
+// Enter key
 searchInput.addEventListener("keydown",event=>{
   if(event.key==="Enter"){
     event.preventDefault();
     searchMap();
   }
-
   if(event.key==="Escape"){
     resultsBox.style.display="none";
   }
 });
 
-// Optional automatic suggestions while typing
+// Automatic suggestions
 searchInput.addEventListener("input",()=>{
   clearTimeout(searchTimer);
-
   const query=searchInput.value.trim();
 
   if(query.length<3){
@@ -922,12 +749,10 @@ searchInput.addEventListener("input",()=>{
     return;
   }
 
-  searchTimer=setTimeout(()=>{
-    searchMap();
-  },650);
+  searchTimer=setTimeout(searchMap,650);
 });
 
-// Close result list when clicking outside
+// Close results outside search
 document.addEventListener("click",event=>{
   if(!event.target.closest(".map-search-wrap")){
     resultsBox.style.display="none";
@@ -965,9 +790,7 @@ function locateMe(){
 
       map.flyTo(coords,15,{duration:1.2});
     },
-    ()=>{
-      alert("Location permission denied or unavailable.");
-    }
+    ()=>alert("Location permission denied or unavailable.")
   );
 }
 
@@ -981,7 +804,6 @@ loadWeather();
 // Refresh weather every 15 minutes
 setInterval(loadWeather,15*60*1000);
 
-// Fix map sizing after page loads
 window.addEventListener("load",()=>{
   setTimeout(()=>map.invalidateSize(),400);
 });
