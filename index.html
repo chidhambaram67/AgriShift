@@ -1,729 +1,1393 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AgriShift - Erode Farm Climate Advisor</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriShift | Farm Climate Advisor</title>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
-<style>
-:root {
-  --green:#176b45;
-  --dark:#104b32;
-  --light:#e8f5ed;
-  --bg:#f4f7f3;
-  --text:#203128;
-  --muted:#68766d;
-  --border:#e1e9e2;
-  --white:#fff;
-}
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text)}
-button,select,input{font:inherit}
-button{cursor:pointer}
-header{background:white;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:1000}
-.nav{max-width:1200px;margin:auto;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px}
-.brand{display:flex;align-items:center;gap:11px}
-.brand-icon{width:43px;height:43px;display:grid;place-items:center;background:var(--light);color:var(--green);border-radius:12px;font-size:22px}
-.brand h1{font-size:19px;margin:0;color:var(--dark)}
-.brand small{font-size:11px;color:var(--muted)}
-.actions{display:flex;gap:8px}
-.btn{border:0;border-radius:9px;padding:11px 14px;font-weight:bold}
-.green{background:var(--green);color:white}
-.light{background:var(--light);color:var(--dark)}
-main{max-width:1200px;margin:auto;padding:22px 20px 40px}
-.hero{padding:32px;background:linear-gradient(120deg,#104b32,#238052);border-radius:18px;color:white;display:flex;justify-content:space-between;align-items:center;gap:15px}
-.hero h2{font-size:clamp(25px,4vw,36px);margin:10px 0}
-.hero p{line-height:1.6;color:#e3f2e8;max-width:700px}
-.hero-icon{font-size:70px;padding:0 20px}
-.tag{display:inline-block;padding:8px 12px;border-radius:30px;background:#ffffff22;font-size:12px}
-.section{margin-top:30px}
-.heading{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:15px}
-.heading h2{font-size:22px;color:var(--dark);margin:0}
-.heading p{font-size:13px;color:var(--muted);margin:5px 0}
-.panel,.metric,.advice,.strategy{background:white;border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:0 7px 22px #19462b0d}
-.controls{display:flex;align-items:end;gap:13px;flex-wrap:wrap}
-.group{display:flex;flex-direction:column;gap:6px}
-.group label{font-size:12px;color:var(--muted);font-weight:bold}
-select,input{border:1px solid var(--border);border-radius:9px;padding:11px;background:white;min-width:170px}
-.pill{display:inline-block;background:var(--light);color:var(--dark);padding:10px 13px;border-radius:25px;font-size:13px;font-weight:bold}
-.status{font-size:12px;color:var(--muted);margin-top:12px}
-.status.error{color:#b42318}
-.status.success{color:var(--green)}
-.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
-.metric{padding:16px;min-width:0}
-.metric-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.metric-label{font-size:12px;color:var(--muted);font-weight:bold}
-.metric-icon{width:37px;height:37px;display:grid;place-items:center;background:var(--light);color:var(--green);border-radius:10px}
-.metric-value{font-size:26px;font-weight:800;color:var(--dark);margin:13px 0 5px}
-.metric-note{font-size:11px;color:var(--muted);line-height:1.4}
-.charts{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.chart-box{height:250px;position:relative}
-.chart-title{font-weight:bold;margin:0 0 15px;font-size:15px}
-.advice-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.advice h3,.strategy h3{color:var(--dark);margin:0 0 10px}
-.advice p,.strategy p,.strategy li{font-size:13px;color:var(--muted);line-height:1.65}
-.strategy-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.strategy-icon{font-size:27px;color:var(--green);margin-bottom:12px}
-.strategy ul{padding-left:18px}
-.map-panel{padding:13px}
-.map-tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-.map-tools input{flex:1;min-width:190px}
-#map{width:100%;height:470px;border-radius:12px;z-index:1;background:#e9eee9}
-#searchResults{display:none;margin:10px 0;padding:12px;background:#f7faf7;border:1px solid var(--border);border-radius:10px}
-#searchResults h4{margin:0 0 8px;color:var(--dark)}
-.result-item{display:block;width:100%;text-align:left;padding:10px;border:0;border-bottom:1px solid var(--border);background:transparent;color:var(--text);border-radius:6px}
-.result-item:hover{background:var(--light)}
-.result-item small{display:block;color:var(--muted);margin-top:4px}
-.map-caption{font-size:12px;color:var(--muted);line-height:1.5}
-.note{background:#fff9e9;border:1px solid #f2dfaa;padding:16px;border-radius:12px;color:#6c5317;font-size:12px;line-height:1.7}
-footer{text-align:center;color:var(--muted);font-size:12px;padding:25px}
-@media(max-width:850px){.cards{grid-template-columns:repeat(2,1fr)}.strategy-grid{grid-template-columns:1fr}}
-@media(max-width:650px){
- .nav{padding:11px 12px}.brand h1{font-size:15px}.brand small{font-size:10px}
- .actions .btn{padding:9px;font-size:12px}
- main{padding:14px 11px 30px}.hero{padding:23px 18px}.hero-icon{display:none}
- .charts,.advice-grid{grid-template-columns:1fr}
- #map{height:370px}.metric{padding:12px}.metric-value{font-size:22px}
-}
-</style>
+  <style>
+    :root {
+      --green: #176b45;
+      --green-dark: #104c33;
+      --green-light: #e9f5ed;
+      --bg: #f5f8f5;
+      --card: #ffffff;
+      --text: #1d3025;
+      --muted: #718078;
+      --border: #e1e9e2;
+      --orange: #e89a35;
+      --blue: #3988bd;
+      --shadow: 0 5px 22px rgba(25, 65, 42, .07);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    header {
+      background: linear-gradient(120deg, #104c33, #238052);
+      color: white;
+      padding: 25px 6%;
+    }
+
+    .header-inner {
+      max-width: 1250px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+    }
+
+    .brand-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 15px;
+      background: rgba(255,255,255,.15);
+      display: grid;
+      place-items: center;
+      font-size: 27px;
+    }
+
+    .brand h1 {
+      font-size: 27px;
+      margin: 0;
+      letter-spacing: .3px;
+    }
+
+    .brand p {
+      margin: 5px 0 0;
+      color: #d7efdf;
+      font-size: 14px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    button, select, input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .language-btn {
+      color: white;
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.35);
+      border-radius: 9px;
+      padding: 10px 14px;
+    }
+
+    main {
+      max-width: 1250px;
+      margin: 28px auto;
+      padding: 0 20px 50px;
+    }
+
+    .welcome {
+      margin-bottom: 22px;
+    }
+
+    .welcome h2 {
+      margin: 0 0 7px;
+      font-size: 25px;
+    }
+
+    .welcome p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 22px;
+    }
+
+    .section-title {
+      font-size: 19px;
+      margin: 0 0 15px;
+    }
+
+    .location-row {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 10px;
+    }
+
+    input, select {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 12px;
+      background: white;
+      color: var(--text);
+      min-width: 0;
+    }
+
+    .primary-btn {
+      border: none;
+      border-radius: 9px;
+      padding: 12px 18px;
+      color: white;
+      background: var(--green);
+      font-weight: 600;
+    }
+
+    .primary-btn:hover { background: var(--green-dark); }
+
+    .secondary-btn {
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 12px 15px;
+      background: white;
+      color: var(--green-dark);
+      font-weight: 600;
+    }
+
+    .location-info {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 18px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-bottom: 22px;
+    }
+
+    .metric {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 19px;
+      box-shadow: var(--shadow);
+      min-width: 0;
+    }
+
+    .metric-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .metric-name {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .metric-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 11px;
+      background: var(--green-light);
+      display: grid;
+      place-items: center;
+      font-size: 19px;
+    }
+
+    .metric-value {
+      font-size: 27px;
+      font-weight: 700;
+      margin-top: 15px;
+      overflow-wrap: anywhere;
+    }
+
+    .metric-note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .status {
+      display: inline-block;
+      border-radius: 30px;
+      padding: 6px 10px;
+      background: var(--green-light);
+      color: var(--green-dark);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .status.loading {
+      background: #fff4df;
+      color: #936016;
+    }
+
+    .status.error {
+      background: #fdebea;
+      color: #a43d35;
+    }
+
+    .charts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .chart-box {
+      min-width: 0;
+    }
+
+    canvas {
+      width: 100%;
+      height: 230px;
+      display: block;
+    }
+
+    .chart-caption {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+      margin-top: 8px;
+    }
+
+    #map {
+      width: 100%;
+      height: 390px;
+      border-radius: 12px;
+      z-index: 1;
+    }
+
+    .map-note {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+      margin-top: 12px;
+    }
+
+    .crop-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      align-items: end;
+    }
+
+    .strategy-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+
+    .strategy {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 17px;
+      background: #fff;
+    }
+
+    .strategy h3 {
+      font-size: 16px;
+      margin: 0 0 9px;
+    }
+
+    .strategy p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .strategy-tag {
+      display: inline-block;
+      background: var(--green-light);
+      color: var(--green-dark);
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 9px;
+      margin-bottom: 11px;
+    }
+
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .resource {
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      padding: 15px;
+      background: #fff;
+    }
+
+    .resource h3 {
+      margin: 0 0 7px;
+      font-size: 15px;
+    }
+
+    .resource p {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+      margin: 0 0 10px;
+    }
+
+    .resource a {
+      color: var(--green);
+      font-weight: 700;
+      font-size: 12px;
+      text-decoration: none;
+    }
+
+    .resource a:hover { text-decoration: underline; }
+
+    .resource-note {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+      margin-top: 15px;
+    }
+
+    .notice {
+      border-left: 4px solid var(--orange);
+      background: #fff9ed;
+      padding: 13px 15px;
+      border-radius: 8px;
+      color: #74521e;
+      font-size: 13px;
+      line-height: 1.6;
+      margin-top: 15px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: var(--muted);
+      font-size: 12px;
+      border-top: 1px solid var(--border);
+      line-height: 1.7;
+    }
+
+    @media (max-width: 760px) {
+      .cards { grid-template-columns: repeat(2, 1fr); }
+      .charts, .strategy-grid { grid-template-columns: 1fr; }
+      .resource-grid { grid-template-columns: 1fr; }
+      .location-row { grid-template-columns: 1fr 1fr; }
+      .location-row input { grid-column: 1 / -1; }
+    }
+
+    @media (max-width: 480px) {
+      main { padding-left: 12px; padding-right: 12px; }
+      .cards { grid-template-columns: 1fr 1fr; gap: 9px; }
+      .metric { padding: 13px; }
+      .metric-value { font-size: 22px; }
+      .controls, .crop-row { grid-template-columns: 1fr; }
+      .brand h1 { font-size: 23px; }
+      #map { height: 310px; }
+    }
+  </style>
 </head>
 
 <body>
+
 <header>
- <div class="nav">
-  <div class="brand">
-   <div class="brand-icon"><i class="fa-solid fa-leaf"></i></div>
-   <div><h1>AgriShift</h1><small id="subtitle">Erode Farm Climate Advisor</small></div>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-icon">🌱</div>
+      <div>
+        <h1>AgriShift</h1>
+        <p id="subtitle">Farm Climate Advisor</p>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button class="language-btn" id="languageBtn" onclick="toggleLanguage()">
+        தமிழ்
+      </button>
+    </div>
   </div>
-  <div class="actions">
-   <button class="btn light" id="languageButton" onclick="toggleLanguage()">தமிழ்</button>
-   <button class="btn green" onclick="loadNASA()"><i class="fa-solid fa-rotate"></i> Refresh</button>
-  </div>
- </div>
 </header>
 
 <main>
- <section class="hero">
-  <div>
-   <span class="tag">NASA DATA • SMART AGRICULTURE</span>
-   <h2 id="heroTitle">Field Shift: Adapting Farms with NASA Data</h2>
-   <p id="heroText">Understand local climate patterns and make informed farming decisions using NASA POWER climate data.</p>
-  </div>
-  <div class="hero-icon"><i class="fa-solid fa-seedling"></i></div>
- </section>
 
- <section class="section">
-  <div class="heading">
-   <div><h2 id="dashboardTitle">Farm Dashboard</h2><p id="dashboardSub">Choose a crop and location to view climate information.</p></div>
-   <span class="pill"><i class="fa-solid fa-location-dot"></i> <span id="currentLocation">Erode, Tamil Nadu</span></span>
-  </div>
-  <div class="panel">
-   <div class="controls">
-    <div class="group">
-     <label>CROP / பயிர்</label>
-     <select id="crop" onchange="updateCrop()">
-      <option value="turmeric">Turmeric / மஞ்சள்</option>
-      <option value="paddy">Paddy / நெல்</option>
-      <option value="sugarcane">Sugarcane / கரும்பு</option>
-     </select>
+  <section class="welcome">
+    <h2 id="welcomeTitle">Understand Your Farm's Climate</h2>
+    <p id="welcomeText">
+      Explore NASA Earth observation data and compare climate conditions
+      to support more informed farm decisions.
+    </p>
+  </section>
+
+  <!-- LOCATION -->
+  <section class="panel">
+    <h2 class="section-title" id="locationTitle">📍 Select Farm Location</h2>
+
+    <div class="location-row">
+      <input id="placeSearch" type="text"
+        placeholder="Search any place in the world...">
+
+      <button class="primary-btn" onclick="searchPlace()" id="searchBtn">
+        Search
+      </button>
+
+      <button class="secondary-btn" onclick="resetLocation()" id="resetBtn">
+        Default
+      </button>
     </div>
-    <div class="group">
-     <label>ERODE REGION</label>
-     <select id="region" onchange="changeRegion()">
-      <option value="erode">Erode</option>
-      <option value="bhavani">Bhavani</option>
-      <option value="gobi">Gobichettipalayam</option>
-      <option value="perundurai">Perundurai</option>
-      <option value="sathy">Sathyamangalam</option>
-     </select>
+
+    <div class="location-info" id="locationInfo">
+      Default location: Erode, Tamil Nadu, India.
+      Search for another location or click on the map.
     </div>
-    <div class="group">
-     <label>DATA SOURCE</label>
-     <span class="pill"><i class="fa-solid fa-satellite"></i> NASA POWER</span>
+
+    <div class="controls">
+      <div class="field">
+        <label for="cropSelect" id="cropLabel">Select Crop</label>
+        <select id="cropSelect">
+          <option value="Turmeric">Turmeric</option>
+          <option value="Paddy">Paddy</option>
+          <option value="Millet">Millet</option>
+          <option value="Sugarcane">Sugarcane</option>
+          <option value="Cotton">Cotton</option>
+          <option value="Groundnut">Groundnut</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label id="periodLabel">Data period</label>
+        <select id="periodSelect">
+          <option value="30">Last 30 available days</option>
+          <option value="90">Last 90 available days</option>
+          <option value="365">Last 365 available days</option>
+        </select>
+      </div>
     </div>
-   </div>
-   <div id="dataStatus" class="status">Connecting to NASA POWER...</div>
-  </div>
- </section>
+  </section>
 
- <section class="section">
-  <div class="heading"><div><h2>Climate Conditions</h2><p>Latest available daily values from NASA POWER</p></div><span class="pill" id="dataDate">Date: --</span></div>
-  <div class="cards">
-   <div class="metric"><div class="metric-top"><span class="metric-label">Average Temperature</span><span class="metric-icon"><i class="fa-solid fa-temperature-half"></i></span></div><div class="metric-value" id="temp">-- °C</div><div class="metric-note">Air temperature at 2 metres</div></div>
-   <div class="metric"><div class="metric-top"><span class="metric-label">Rainfall</span><span class="metric-icon"><i class="fa-solid fa-cloud-rain"></i></span></div><div class="metric-value" id="rain">-- mm</div><div class="metric-note">Daily corrected precipitation</div></div>
-   <div class="metric"><div class="metric-top"><span class="metric-label">Relative Humidity</span><span class="metric-icon"><i class="fa-solid fa-droplet"></i></span></div><div class="metric-value" id="humidity">-- %</div><div class="metric-note">Relative humidity at 2 metres</div></div>
-   <div class="metric"><div class="metric-top"><span class="metric-label">Solar Radiation</span><span class="metric-icon"><i class="fa-solid fa-sun"></i></span></div><div class="metric-value" id="solar">--</div><div class="metric-note">MJ/m²/day</div></div>
-   <div class="metric"><div class="metric-top"><span class="metric-label">Maximum Temperature</span><span class="metric-icon"><i class="fa-solid fa-temperature-high"></i></span></div><div class="metric-value" id="maximum">-- °C</div><div class="metric-note">Daily maximum air temperature</div></div>
-   <div class="metric"><div class="metric-top"><span class="metric-label">Minimum Temperature</span><span class="metric-icon"><i class="fa-solid fa-temperature-low"></i></span></div><div class="metric-value" id="minimum">-- °C</div><div class="metric-note">Daily minimum air temperature</div></div>
-   <div class="metric"><div class="metric-top"><span class="metric-label">NASA Soil Wetness</span><span class="metric-icon"><i class="fa-solid fa-water"></i></span></div><div class="metric-value" id="soil">--</div><div class="metric-note">GWETTOP wetness fraction; not a farm sensor</div></div>
-   <div class="metric"><div class="metric-top"><span class="metric-label">Selected Crop</span><span class="metric-icon"><i class="fa-solid fa-wheat-awn"></i></span></div><div class="metric-value" id="cropName" style="font-size:20px">Turmeric</div><div class="metric-note">Crop guidance below</div></div>
-  </div>
- </section>
+  <!-- NASA POWER DASHBOARD -->
+  <section>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+      <h2 class="section-title" style="margin:0" id="climateTitle">
+        🛰️ NASA POWER Climate Dashboard
+      </h2>
+      <span class="status loading" id="dataStatus">Loading NASA data...</span>
+    </div>
 
- <section class="section">
-  <div class="heading"><div><h2>30-Day Climate Analysis</h2><p>Historical daily climate data, not a weather forecast.</p></div></div>
-  <div class="charts">
-   <div class="panel"><h3 class="chart-title">Temperature Trend (°C)</h3><div class="chart-box"><canvas id="tempChart"></canvas></div></div>
-   <div class="panel"><h3 class="chart-title">Daily Rainfall (mm)</h3><div class="chart-box"><canvas id="rainChart"></canvas></div></div>
-   <div class="panel"><h3 class="chart-title">Solar Radiation (MJ/m²/day)</h3><div class="chart-box"><canvas id="solarChart"></canvas></div></div>
-   <div class="panel"><h3 class="chart-title">Relative Humidity (%)</h3><div class="chart-box"><canvas id="humidityChart"></canvas></div></div>
-  </div>
- </section>
+    <div class="cards">
+      <div class="metric">
+        <div class="metric-top">
+          <span class="metric-name" id="avgTempLabel">Average Temperature</span>
+          <span class="metric-icon">🌡️</span>
+        </div>
+        <div class="metric-value" id="avgTemp">--</div>
+        <div class="metric-note">T2M · °C</div>
+      </div>
 
- <section class="section">
-  <div class="heading"><div><h2>Smart Crop Advisor</h2><p>General guidance for your selected crop.</p></div></div>
-  <div class="advice-grid">
-   <div class="advice"><h3><i class="fa-solid fa-seedling"></i> Crop Recommendation</h3><p id="recommendation">Select a crop to see advice.</p></div>
-   <div class="advice"><h3><i class="fa-solid fa-lightbulb"></i> Climate-Based Suggestions</h3><ul id="suggestions"><li>Loading suggestions...</li></ul></div>
-  </div>
- </section>
+      <div class="metric">
+        <div class="metric-top">
+          <span class="metric-name" id="maxTempLabel">Maximum Temperature</span>
+          <span class="metric-icon">☀️</span>
+        </div>
+        <div class="metric-value" id="maxTemp">--</div>
+        <div class="metric-note">T2M_MAX · °C</div>
+      </div>
 
- <section class="section">
-  <div class="heading"><div><h2>Farm Adaptation Strategies</h2><p>Practical approaches for changing climate conditions.</p></div></div>
-  <div class="strategy-grid">
-   <div class="strategy"><div class="strategy-icon"><i class="fa-solid fa-seedling"></i></div><h3>1. Baseline Farming</h3><p>Use local seasonal practices and monitor rainfall and temperature.</p><ul><li>Follow local agriculture department guidance.</li><li>Record rainfall and irrigation.</li><li>Choose suitable crop varieties.</li></ul></div>
-   <div class="strategy"><div class="strategy-icon"><i class="fa-solid fa-recycle"></i></div><h3>2. Soil Recovery</h3><p>Improve soil health and water retention through sustainable practices.</p><ul><li>Use suitable compost and organic matter.</li><li>Use mulch where appropriate.</li><li>Prevent soil erosion.</li></ul></div>
-   <div class="strategy"><div class="strategy-icon"><i class="fa-solid fa-cloud-sun-rain"></i></div><h3>3. Climate Resilient Farming</h3><p>Prepare for variable rainfall and heat using locally suitable practices.</p><ul><li>Plan water storage and efficient irrigation.</li><li>Consider crop diversification.</li><li>Check local weather advisories.</li></ul></div>
-  </div>
- </section>
+      <div class="metric">
+        <div class="metric-top">
+          <span class="metric-name" id="minTempLabel">Minimum Temperature</span>
+          <span class="metric-icon">🌙</span>
+        </div>
+        <div class="metric-value" id="minTemp">--</div>
+        <div class="metric-note">T2M_MIN · °C</div>
+      </div>
 
- <section class="section">
-  <div class="heading"><div><h2><i class="fa-solid fa-map-location-dot"></i> Worldwide Interactive Map</h2><p>Search cities, towns, countries, addresses and many points of interest around the world.</p></div></div>
-  <div class="panel map-panel">
-   <div class="map-tools">
-    <input id="placeSearch" type="search" placeholder="Search any place in the world (e.g. Chennai, Eiffel Tower, London)...">
-    <button class="btn green" onclick="searchWorld()"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
-    <button class="btn light" onclick="resetMap()"><i class="fa-solid fa-house"></i> Erode</button>
-    <button class="btn light" onclick="locateMe()"><i class="fa-solid fa-location-crosshairs"></i> My Location</button>
-    <button class="btn light" onclick="toggleSatellite()"><i class="fa-solid fa-earth-asia"></i> Satellite</button>
-   </div>
-   <div id="searchStatus" class="status" aria-live="polite"></div>
-   <div id="searchResults">
-    <h4>Search results — select a place</h4>
-    <div id="resultList"></div>
-   </div>
-   <div id="map"></div>
-   <p class="map-caption">Street map: OpenStreetMap. Satellite imagery: Esri. Search: Photon with Open-Meteo geocoding fallback. Map markers are location references, not verified farm boundaries.</p>
-  </div>
- </section>
+      <div class="metric">
+        <div class="metric-top">
+          <span class="metric-name" id="rainLabel">Total Rainfall</span>
+          <span class="metric-icon">🌧️</span>
+        </div>
+        <div class="metric-value" id="rainfall">--</div>
+        <div class="metric-note">PRECTOTCORR · mm</div>
+      </div>
 
- <section class="section">
-  <div class="note"><b><i class="fa-solid fa-circle-info"></i> NASA data information</b><br>
-   This project uses the NASA POWER Daily API. Temperature, precipitation, humidity and solar radiation are gridded estimates for the selected coordinates, not measurements from an individual farm. Soil wetness (GWETTOP) is requested separately and may not always be available. It is a model-based wetness fraction, not a direct farm sensor reading. The 30-day charts show historical daily data, not future forecasts. Data may be delayed.
-   <br><br><b>Sources:</b>
-   <a href="https://power.larc.nasa.gov/" target="_blank" rel="noopener">NASA POWER</a> |
-   <a href="https://power.larc.nasa.gov/docs/services/api/temporal/daily/" target="_blank" rel="noopener">NASA POWER API documentation</a>
-  </div>
- </section>
+      <div class="metric">
+        <div class="metric-top">
+          <span class="metric-name" id="humidityLabel">Average Humidity</span>
+          <span class="metric-icon">💧</span>
+        </div>
+        <div class="metric-value" id="humidity">--</div>
+        <div class="metric-note">RH2M · %</div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-top">
+          <span class="metric-name" id="solarLabel">Solar Radiation</span>
+          <span class="metric-icon">🔆</span>
+        </div>
+        <div class="metric-value" id="solar">--</div>
+        <div class="metric-note">ALLSKY_SFC_SW_DWN · MJ/m²/day</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHARTS -->
+  <section class="panel">
+    <h2 class="section-title" id="chartsTitle">📊 Historical Climate Trends</h2>
+
+    <div class="charts">
+      <div class="chart-box">
+        <h3 style="font-size:15px" id="tempChartTitle">Daily Temperature</h3>
+        <canvas id="tempChart"></canvas>
+        <p class="chart-caption">
+          NASA POWER daily average temperature (T2M).
+        </p>
+      </div>
+
+      <div class="chart-box">
+        <h3 style="font-size:15px" id="rainChartTitle">Daily Rainfall</h3>
+        <canvas id="rainChart"></canvas>
+        <p class="chart-caption">
+          NASA POWER corrected precipitation (PRECTOTCORR).
+        </p>
+      </div>
+    </div>
+
+    <p class="chart-caption" id="dateRange">Waiting for data...</p>
+  </section>
+
+  <!-- MAP -->
+  <section class="panel">
+    <h2 class="section-title" id="mapTitle">🗺️ Interactive Farm Location Map</h2>
+    <div id="map"></div>
+    <p class="map-note" id="mapNote">
+      Search for a location or click anywhere on the map to load NASA POWER
+      climate data for that coordinate. The map marker is a location reference,
+      not a farm boundary.
+    </p>
+  </section>
+
+  <!-- CROP ROTATION -->
+  <section class="panel">
+    <h2 class="section-title" id="rotationTitle">
+      🌾 Crop Rotation Strategy Comparison
+    </h2>
+
+    <div class="crop-row">
+      <div class="field">
+        <label id="selectedCropLabel">Selected crop</label>
+        <input id="selectedCropDisplay" value="Turmeric" readonly>
+      </div>
+
+      <div class="field">
+        <label id="priorityLabel">Planning priority</label>
+        <select id="prioritySelect">
+          <option value="water">Water conservation</option>
+          <option value="soil">Soil improvement</option>
+          <option value="climate">Climate adaptation</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="strategy-grid" style="margin-top:17px">
+      <div class="strategy">
+        <span class="strategy-tag">Strategy 01</span>
+        <h3 id="strategyOneTitle">Existing Farm Rotation</h3>
+        <p id="strategyOneText">
+          Record the farmer's current crop sequence, irrigation practices
+          and observed field conditions. Use this as the baseline for comparison.
+        </p>
+      </div>
+
+      <div class="strategy">
+        <span class="strategy-tag">Strategy 02</span>
+        <h3 id="strategyTwoTitle">Soil Improvement Rotation</h3>
+        <p id="strategyTwoText">
+          Explore suitable crop sequences that may support soil cover,
+          organic matter and soil condition. Confirm crop suitability locally.
+        </p>
+      </div>
+
+      <div class="strategy">
+        <span class="strategy-tag">Strategy 03</span>
+        <h3 id="strategyThreeTitle">Water-Saving Rotation</h3>
+        <p id="strategyThreeText">
+          Compare crop sequences using water demand, rainfall history
+          and available irrigation information.
+        </p>
+      </div>
+    </div>
+
+    <div class="notice" id="rotationNotice">
+      These are comparison frameworks, not automatic crop prescriptions.
+      Final rotation choices should consider soil tests, local agricultural
+      guidance, irrigation availability, season and market conditions.
+    </div>
+  </section>
+
+  <!-- DATA RESOURCES -->
+  <section class="panel">
+    <h2 class="section-title" id="resourcesTitle">
+      🛰️ Earth Observation & Agriculture Resources
+    </h2>
+
+    <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-top:-5px">
+      Data resources from the project research list. Open the official
+      source to explore datasets and their availability.
+    </p>
+
+    <div class="resource-grid">
+
+      <div class="resource">
+        <h3>NASA POWER</h3>
+        <p>Solar radiation, temperature, humidity and meteorological data.
+          Integrated live into this dashboard.</p>
+        <a href="https://power.larc.nasa.gov/" target="_blank" rel="noopener">
+          Open NASA POWER →
+        </a>
+      </div>
+
+      <div class="resource">
+        <h3>SMAP – Soil Moisture</h3>
+        <p>Satellite measurements of surface soil moisture and freeze/thaw
+          conditions for water availability and drought research.</p>
+        <a href="https://smap.jpl.nasa.gov/data/" target="_blank" rel="noopener">
+          Explore SMAP data →
+        </a>
+      </div>
+
+      <div class="resource">
+        <h3>GPM / IMERG – Rainfall</h3>
+        <p>Satellite-based precipitation estimates for rainfall patterns
+          and water input analysis.</p>
+        <a href="https://gpm.nasa.gov/data/imerg" target="_blank" rel="noopener">
+          Explore GPM IMERG →
+        </a>
+      </div>
+
+      <div class="resource">
+        <h3>Landsat – Earth Observation</h3>
+        <p>Reflectance and land-surface imagery useful for vegetation
+          and land-cover analysis.</p>
+        <a href="https://landsat.gsfc.nasa.gov/data/" target="_blank" rel="noopener">
+          Explore Landsat →
+        </a>
+      </div>
+
+      <div class="resource">
+        <h3>MODIS / VIIRS – Vegetation</h3>
+        <p>Vegetation indices and seasonal observations that can help
+          study crop growth patterns.</p>
+        <a href="https://worldview.earthdata.nasa.gov/" target="_blank" rel="noopener">
+          Explore NASA Worldview →
+        </a>
+      </div>
+
+      <div class="resource">
+        <h3>SRTM – Elevation & Terrain</h3>
+        <p>Elevation information useful for studying slope, terrain
+          and potential runoff patterns.</p>
+        <a href="https://www.earthdata.nasa.gov/data/instruments/srtm" target="_blank" rel="noopener">
+          Explore SRTM →
+        </a>
+      </div>
+
+      <div class="resource">
+        <h3>ECOSTRESS – Heat & Evapotranspiration</h3>
+        <p>Land-surface temperature and evapotranspiration products
+          for studying heat and water stress.</p>
+        <a href="https://ecostress.jpl.nasa.gov/data" target="_blank" rel="noopener">
+          Explore ECOSTRESS →
+        </a>
+      </div>
+
+      <div class="resource">
+        <h3>GLDAS / NLDAS</h3>
+        <p>Land data assimilation products for studying soil moisture,
+          water and environmental conditions.</p>
+        <a href="https://disc.gsfc.nasa.gov/" target="_blank" rel="noopener">
+          Explore NASA Earthdata →
+        </a>
+      </div>
+
+      <div class="resource">
+        <h3>GEDI – Vegetation Structure</h3>
+        <p>Laser-based measurements of forest structure and biomass
+          that can provide surrounding landscape context.</p>
+        <a href="https://gedi.umd.edu/data/" target="_blank" rel="noopener">
+          Explore GEDI →
+        </a>
+      </div>
+
+      <div class="resource">
+        <h3>FAO Global Agro-Ecological Zones</h3>
+        <p>Global crop suitability, agro-climatic and land productivity
+          information.</p>
+        <a href="https://gaez.fao.org/" target="_blank" rel="noopener">
+          Explore FAO GAEZ →
+        </a>
+      </div>
+
+      <div class="resource">
+        <h3>USDA Ag Data Commons</h3>
+        <p>Open agricultural research datasets covering crops, soils,
+          climate and land management.</p>
+        <a href="https://agdatacommons.nal.usda.gov/" target="_blank" rel="noopener">
+          Explore Ag Data Commons →
+        </a>
+      </div>
+
+      <div class="resource">
+        <h3>USDA Web Soil Survey</h3>
+        <p>Detailed soil survey information for the United States.
+          Not a local Erode soil map.</p>
+        <a href="https://websoilsurvey.nrcs.usda.gov/" target="_blank" rel="noopener">
+          Explore Web Soil Survey →
+        </a>
+      </div>
+
+      <div class="resource">
+        <h3>USDA Cropland Data Layer</h3>
+        <p>Annual crop classification data for the United States.
+          Not a crop map for India.</p>
+        <a href="https://www.nass.usda.gov/Research_and_Science/Cropland/Release/" target="_blank" rel="noopener">
+          Explore Cropland Data Layer →
+        </a>
+      </div>
+
+      <div class="resource">
+        <h3>PRISM Climate Data</h3>
+        <p>High-resolution climate datasets focused on the United States.</p>
+        <a href="https://prism.oregonstate.edu/" target="_blank" rel="noopener">
+          Explore PRISM →
+        </a>
+      </div>
+
+      <div class="resource">
+        <h3>USGS National Land Cover Database</h3>
+        <p>Land-cover classification and land-use change data for the United States.</p>
+        <a href="https://www.usgs.gov/centers/eros/science/national-land-cover-database" target="_blank" rel="noopener">
+          Explore NLCD →
+        </a>
+      </div>
+
+      <div class="resource">
+        <h3>USGS Water Information</h3>
+        <p>Water-level, streamflow and water-quality information for
+          US monitoring locations.</p>
+        <a href="https://waterdata.usgs.gov/nwis" target="_blank" rel="noopener">
+          Explore NWIS →
+        </a>
+      </div>
+
+      <div class="resource">
+        <h3>OpenET</h3>
+        <p>Satellite-based evapotranspiration estimates, with coverage
+          focused on the western United States.</p>
+        <a href="https://openetdata.org/" target="_blank" rel="noopener">
+          Explore OpenET →
+        </a>
+      </div>
+
+      <div class="resource">
+        <h3>USDA NASS QuickStats</h3>
+        <p>Agricultural statistics including crop production and
+          planted acreage for US regions.</p>
+        <a href="https://quickstats.nass.usda.gov/" target="_blank" rel="noopener">
+          Explore QuickStats →
+        </a>
+      </div>
+
+      <div class="resource">
+        <h3>USDA AMS Market News</h3>
+        <p>US agricultural commodity market information and reports.</p>
+        <a href="https://www.ams.usda.gov/market-news" target="_blank" rel="noopener">
+          Explore Market News →
+        </a>
+      </div>
+
+      <div class="resource">
+        <h3>USFS LANDFIRE</h3>
+        <p>Vegetation, landscape and ecological datasets for the United States.</p>
+        <a href="https://www.landfire.gov/" target="_blank" rel="noopener">
+          Explore LANDFIRE →
+        </a>
+      </div>
+
+    </div>
+
+    <p class="resource-note">
+      Resource availability, geographic coverage, resolution and access
+      requirements differ. The links above are discovery links; this first
+      version does not download or process all these datasets automatically.
+    </p>
+  </section>
+
+  <!-- DATA INFORMATION -->
+  <section class="panel">
+    <h2 class="section-title" id="aboutTitle">ℹ️ About the NASA Data</h2>
+
+    <p style="font-size:13px;color:var(--muted);line-height:1.8">
+      NASA POWER provides daily solar and meteorological time-series data.
+      This dashboard requests the selected location's data through the
+      NASA POWER Daily Point API. Values shown are historical or near-real-time
+      data, not a weather forecast or direct farm sensor readings.
+    </p>
+
+    <p style="font-size:13px;color:var(--muted);line-height:1.8">
+      NASA POWER data can represent a broader grid cell rather than the
+      exact conditions of an individual field. Use local observations and
+      soil tests when making farm decisions.
+    </p>
+
+    <a href="https://power.larc.nasa.gov/docs/services/api/temporal/daily/"
+       target="_blank" rel="noopener"
+       style="color:var(--green);font-weight:700;font-size:13px">
+      NASA POWER API Documentation →
+    </a>
+  </section>
+
 </main>
 
-<footer><b>AgriShift – Erode Farm Climate Advisor</b><br>Field Shift: Adapting Farms with NASA Data</footer>
+<footer>
+  <strong>AgriShift – Farm Climate Advisor</strong><br>
+  Powered by NASA POWER data and Earth observation resources.<br>
+  Educational decision-support project. Always verify farm decisions
+  with local agricultural experts.
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
-// =============================================
-// REGION AND NASA SETTINGS
-// =============================================
+  // -----------------------------------------
+  // 1. DEFAULT LOCATION: ERODE, TAMIL NADU
+  // -----------------------------------------
 
-const regions = {
- erode:{name:"Erode",lat:11.3410,lon:77.7172},
- bhavani:{name:"Bhavani",lat:11.4455,lon:77.6821},
- gobi:{name:"Gobichettipalayam",lat:11.4549,lon:77.4422},
- perundurai:{name:"Perundurai",lat:11.2756,lon:77.5870},
- sathy:{name:"Sathyamangalam",lat:11.5053,lon:77.2388}
-};
-
-let selectedRegion="erode";
-let charts={};
-let weatherData=null;
-let satelliteMode=false;
-let searchMarker=null;
-let searchLayer=L.layerGroup();
-let currentLanguage="en";
-
-// =============================================
-// LANGUAGE SWITCH
-// =============================================
-
-const translations={
- en:{
-  subtitle:"Erode Farm Climate Advisor",
-  heroTitle:"Field Shift: Adapting Farms with NASA Data",
-  heroText:"Understand local climate patterns and make informed farming decisions using NASA POWER climate data.",
-  dashboardTitle:"Farm Dashboard",
-  dashboardSub:"Choose a crop and location to view climate information."
- },
- ta:{
-  subtitle:"ஈரோடு விவசாய காலநிலை ஆலோசகர்",
-  heroTitle:"நாசா தரவுடன் விவசாயத்தை மாற்றுவோம்",
-  heroText:"நாசா POWER காலநிலைத் தரவைப் பயன்படுத்தி உள்ளூர் காலநிலை மாற்றங்களைப் புரிந்து சிறந்த விவசாய முடிவுகளை எடுங்கள்.",
-  dashboardTitle:"விவசாயக் கட்டுப்பாட்டுப் பலகை",
-  dashboardSub:"பயிர் மற்றும் இடத்தைத் தேர்ந்தெடுத்து காலநிலைத் தகவலைப் பாருங்கள்."
- }
-};
-
-function toggleLanguage(){
- currentLanguage=currentLanguage==="en"?"ta":"en";
- const t=translations[currentLanguage];
- document.getElementById("subtitle").textContent=t.subtitle;
- document.getElementById("heroTitle").textContent=t.heroTitle;
- document.getElementById("heroText").textContent=t.heroText;
- document.getElementById("dashboardTitle").textContent=t.dashboardTitle;
- document.getElementById("dashboardSub").textContent=t.dashboardSub;
- document.getElementById("languageButton").textContent=currentLanguage==="en"?"தமிழ்":"English";
- updateCrop();
-}
-
-// =============================================
-// MAP — SINGLE WORLD ONLY
-// =============================================
-
-// Erode is the automatic opening location.
-const map=L.map("map",{
- center:[11.3410,77.7172],
- zoom:8,
- minZoom:2,
- maxZoom:19,
- worldCopyJump:false,
- maxBounds:[[-85,-180],[85,180]],
- maxBoundsViscosity:1
-});
-
-// noWrap:true prevents Leaflet from repeating the world horizontally.
-const street=L.tileLayer(
- "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
- {
-  maxZoom:19,
-  noWrap:true,
-  bounds:[[-85,-180],[85,180]],
-  attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
- }
-).addTo(map);
-
-const satellite=L.tileLayer(
- "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
- {
-  maxZoom:19,
-  noWrap:true,
-  bounds:[[-85,-180],[85,180]],
-  attribution:"Tiles &copy; Esri"
- }
-);
-
-searchLayer.addTo(map);
-
-const erodeMarker=L.marker([11.3410,77.7172]).addTo(map)
- .bindPopup("<b>AgriShift</b><br>Erode, Tamil Nadu");
-
-function resetMap(){
- map.setView([11.3410,77.7172],8);
- erodeMarker.openPopup();
- document.getElementById("searchResults").style.display="none";
- document.getElementById("searchStatus").textContent="Map reset to Erode, Tamil Nadu.";
-}
-
-function toggleSatellite(){
- if(satelliteMode){
-  map.removeLayer(satellite);
-  street.addTo(map);
- }else{
-  map.removeLayer(street);
-  satellite.addTo(map);
- }
- satelliteMode=!satelliteMode;
-}
-
-function locateMe(){
- const status=document.getElementById("searchStatus");
- if(!navigator.geolocation){
-  status.textContent="Your browser does not support location services.";
-  return;
- }
- status.textContent="Finding your current location...";
- navigator.geolocation.getCurrentPosition(position=>{
-  const lat=position.coords.latitude;
-  const lon=position.coords.longitude;
-  map.setView([lat,lon],15);
-  searchLayer.clearLayers();
-  L.marker([lat,lon]).addTo(searchLayer).bindPopup("Your current location").openPopup();
-  status.textContent="Your location found.";
- },()=>{
-  status.textContent="Location unavailable. Please allow location access in your browser.";
- },{enableHighAccuracy:true,timeout:10000});
-}
-
-// =============================================
-// WORLDWIDE PLACE SEARCH
-// Photon is tried first. Open-Meteo is a fallback.
-// =============================================
-
-function getPlaceLabel(properties){
- const name=properties.name || properties.city || properties.town ||
-            properties.village || properties.county || "Unnamed place";
- const details=[
-  properties.street,
-  properties.district,
-  properties.city,
-  properties.state,
-  properties.country
- ].filter((value,index,array)=>value && array.indexOf(value)===index && value!==name);
- return {name,details:details.join(", ")};
-}
-
-async function searchPhoton(query){
- const url="https://photon.komoot.io/api/?q="+encodeURIComponent(query)+"&limit=8&lang=en";
- const response=await fetch(url);
- if(!response.ok) throw new Error("Photon search failed");
- const data=await response.json();
- return (data.features||[]).map(feature=>{
-  const p=feature.properties||{};
-  const coords=feature.geometry.coordinates;
-  const label=getPlaceLabel(p);
-  return {
-   name:label.name,
-   details:label.details,
-   lat:Number(coords[1]),
-   lon:Number(coords[0])
+  let currentLocation = {
+    name: "Erode, Tamil Nadu, India",
+    lat: 11.3410,
+    lon: 77.7172
   };
- }).filter(place=>Number.isFinite(place.lat)&&Number.isFinite(place.lon));
-}
 
-async function searchOpenMeteo(query){
- const url="https://geocoding-api.open-meteo.com/v1/search?name="+
-  encodeURIComponent(query)+"&count=8&language=en&format=json";
- const response=await fetch(url);
- if(!response.ok) throw new Error("Open-Meteo search failed");
- const data=await response.json();
- return (data.results||[]).map(place=>({
-  name:place.name||"Unnamed place",
-  details:[place.admin2,place.admin1,place.country].filter(Boolean).join(", "),
-  lat:Number(place.latitude),
-  lon:Number(place.longitude)
- })).filter(place=>Number.isFinite(place.lat)&&Number.isFinite(place.lon));
-}
+  let latestData = null;
 
-async function searchWorld(){
- const input=document.getElementById("placeSearch");
- const status=document.getElementById("searchStatus");
- const resultsBox=document.getElementById("searchResults");
- const resultList=document.getElementById("resultList");
- const query=input.value.trim();
+  // -----------------------------------------
+  // 2. MAP SETUP
+  // -----------------------------------------
 
- if(!query){
-  status.textContent="Please type a place name first.";
-  input.focus();
-  return;
- }
+  const map = L.map("map", {
+    worldCopyJump: true,
+    minZoom: 2
+  }).setView([currentLocation.lat, currentLocation.lon], 10);
 
- status.textContent="Searching worldwide...";
- resultsBox.style.display="none";
- resultList.innerHTML="";
+  const streetLayer = L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+      maxZoom: 19,
+      noWrap: true,
+      attribution: "&copy; OpenStreetMap contributors"
+    }
+  ).addTo(map);
 
- let results=[];
- let photonError=null;
+  const satelliteLayer = L.tileLayer(
+    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    {
+      maxZoom: 18,
+      noWrap: true,
+      attribution: "Tiles &copy; Esri"
+    }
+  );
 
- try{
-  results=await searchPhoton(query);
- }catch(error){
-  photonError=error;
-  console.warn("Photon search unavailable; trying fallback.",error);
- }
+  L.control.layers({
+    "Street Map": streetLayer,
+    "Satellite View": satelliteLayer
+  }).addTo(map);
 
- // Use fallback when Photon is unavailable or returns no results.
- if(!results.length){
-  try{
-   results=await searchOpenMeteo(query);
-  }catch(error){
-   console.warn("Open-Meteo fallback unavailable.",error);
-  }
- }
+  let marker = L.marker([
+    currentLocation.lat,
+    currentLocation.lon
+  ]).addTo(map);
 
- // Remove duplicate coordinates and names.
- const seen=new Set();
- results=results.filter(place=>{
-  const key=place.name.toLowerCase()+"|"+place.lat.toFixed(4)+"|"+place.lon.toFixed(4);
-  if(seen.has(key)) return false;
-  seen.add(key);
-  return true;
- });
+  marker.bindPopup("Selected farm location").openPopup();
 
- if(!results.length){
-  status.textContent="No results found or the search services are unavailable. Check your internet connection and try another place name.";
-  return;
- }
-
- status.textContent=results.length+" result(s) found. Select a place below.";
- resultsBox.style.display="block";
-
- results.forEach(place=>{
-  const button=document.createElement("button");
-  button.type="button";
-  button.className="result-item";
-
-  const title=document.createElement("strong");
-  title.textContent=place.name;
-
-  const detail=document.createElement("small");
-  detail.textContent=place.details || `${place.lat.toFixed(4)}, ${place.lon.toFixed(4)}`;
-
-  button.appendChild(title);
-  button.appendChild(detail);
-  button.addEventListener("click",()=>selectSearchResult(place));
-  resultList.appendChild(button);
- });
-}
-
-function selectSearchResult(place){
- const status=document.getElementById("searchStatus");
- searchLayer.clearLayers();
-
- map.setView([place.lat,place.lon],13);
-
- const marker=L.marker([place.lat,place.lon]).addTo(searchLayer);
- const popup=document.createElement("div");
- const strong=document.createElement("strong");
- strong.textContent=place.name;
- const small=document.createElement("div");
- small.textContent=place.details || `${place.lat.toFixed(4)}, ${place.lon.toFixed(4)}`;
- popup.appendChild(strong);
- popup.appendChild(small);
- marker.bindPopup(popup).openPopup();
-
- status.textContent="Showing "+place.name+" on the map.";
- document.getElementById("searchResults").style.display="none";
-}
-
-document.getElementById("placeSearch").addEventListener("keydown",event=>{
- if(event.key==="Enter") searchWorld();
-});
-
-// =============================================
-// NASA POWER DAILY API
-// =============================================
-
-function dateString(date){
- return date.getUTCFullYear()+
-  String(date.getUTCMonth()+1).padStart(2,"0")+
-  String(date.getUTCDate()).padStart(2,"0");
-}
-
-function getDateRange(){
- const end=new Date();
- end.setUTCDate(end.getUTCDate()-3);
- const start=new Date(end);
- start.setUTCDate(start.getUTCDate()-29);
- return {start:dateString(start),end:dateString(end)};
-}
-
-function nasaURL(parameters,community,location,dates){
- const url=new URL("https://power.larc.nasa.gov/api/temporal/daily/point");
- url.searchParams.set("parameters",parameters.join(","));
- url.searchParams.set("community",community);
- url.searchParams.set("longitude",location.lon);
- url.searchParams.set("latitude",location.lat);
- url.searchParams.set("start",dates.start);
- url.searchParams.set("end",dates.end);
- url.searchParams.set("format","JSON");
- url.searchParams.set("time-standard","UTC");
- return url.toString();
-}
-
-async function fetchNASA(parameters,community,location,dates){
- const response=await fetch(nasaURL(parameters,community,location,dates));
- if(!response.ok) throw new Error("NASA API HTTP "+response.status);
- const json=await response.json();
- const data=json?.properties?.parameter;
- if(!data) throw new Error("NASA returned no parameter data.");
- return data;
-}
-
-function latestValue(series){
- if(!series) return null;
- const entries=Object.entries(series)
-  .filter(([date,value])=>value!==-999 && value!==null && Number.isFinite(Number(value)))
-  .sort((a,b)=>b[0].localeCompare(a[0]));
- if(!entries.length) return null;
- return {date:entries[0][0],value:Number(entries[0][1])};
-}
-
-function setMetric(id,item,suffix="",decimals=1){
- document.getElementById(id).textContent=
-  item ? item.value.toFixed(decimals)+suffix : "--";
-}
-
-async function loadNASA(){
- const location=regions[selectedRegion];
- const dates=getDateRange();
- const status=document.getElementById("dataStatus");
- status.className="status";
- status.textContent="Loading NASA POWER data for "+location.name+"...";
-
- const weatherPromise=fetchNASA(
-  ["T2M","T2M_MAX","T2M_MIN","PRECTOTCORR","RH2M","ALLSKY_SFC_SW_DWN"],
-  "AG",location,dates
- );
- const soilPromise=fetchNASA(["GWETTOP"],"HY",location,dates);
-
- const [weatherResult,soilResult]=await Promise.allSettled([
-  weatherPromise,soilPromise
- ]);
-
- if(weatherResult.status!=="fulfilled"){
-  console.error(weatherResult.reason);
-  status.className="status error";
-  status.textContent="NASA weather data could not be loaded. Check your internet connection and try Refresh.";
-  return;
- }
-
- const weather=weatherResult.value;
- const soil=soilResult.status==="fulfilled"?soilResult.value:null;
- weatherData={weather,soil};
-
- const t=latestValue(weather.T2M);
- const r=latestValue(weather.PRECTOTCORR);
- const h=latestValue(weather.RH2M);
- const s=latestValue(weather.ALLSKY_SFC_SW_DWN);
- const max=latestValue(weather.T2M_MAX);
- const min=latestValue(weather.T2M_MIN);
- const wet=soil?latestValue(soil.GWETTOP):null;
-
- setMetric("temp",t," °C");
- setMetric("rain",r," mm");
- setMetric("humidity",h," %");
- setMetric("solar",s,"");
- setMetric("maximum",max," °C");
- setMetric("minimum",min," °C");
- setMetric("soil",wet,"",3);
-
- const all=[t,r,h,s,max,min].filter(Boolean).map(x=>x.date).sort();
- document.getElementById("dataDate").textContent=all.length?"Latest: "+all[all.length-1]:"Date: --";
- document.getElementById("currentLocation").textContent=location.name+", Tamil Nadu";
-
- drawCharts(weather);
- updateCrop();
-
- status.className="status success";
- status.textContent="NASA POWER climate data loaded for "+location.name+
-  (soil?" Soil wetness data loaded.":" Soil wetness is currently unavailable.");
-}
-
-function changeRegion(){
- selectedRegion=document.getElementById("region").value;
- const loc=regions[selectedRegion];
- document.getElementById("currentLocation").textContent=loc.name+", Tamil Nadu";
- map.setView([loc.lat,loc.lon],10);
- loadNASA();
-}
-
-// =============================================
-// CHARTS
-// =============================================
-
-function makeChart(id,label,series,color,type="line"){
- const entries=Object.entries(series||{})
-  .filter(([date,value])=>value!==-999 && Number.isFinite(Number(value)))
-  .sort((a,b)=>a[0].localeCompare(b[0]));
-
- const labels=entries.map(([date])=>date.slice(6,8)+"/"+date.slice(4,6));
- const values=entries.map(([,value])=>Number(value));
- if(charts[id]) charts[id].destroy();
-
- charts[id]=new Chart(document.getElementById(id),{
-  type,
-  data:{labels,datasets:[{
-   label,data:values,borderColor:color,
-   backgroundColor:type==="bar"?color:color+"22",
-   borderWidth:2,fill:type==="line",tension:.3,pointRadius:2
-  }]},
-  options:{
-   responsive:true,maintainAspectRatio:false,
-   plugins:{legend:{display:false}},
-   scales:{
-    x:{ticks:{maxTicksLimit:8},grid:{display:false}},
-    y:{beginAtZero:type==="bar",grid:{color:"#edf1ed"}}
-   }
-  }
- });
-}
-
-function drawCharts(weather){
- makeChart("tempChart","Temperature (°C)",weather.T2M,"#e58b28");
- makeChart("rainChart","Rainfall (mm)",weather.PRECTOTCORR,"#3888c9","bar");
- makeChart("solarChart","Solar radiation",weather.ALLSKY_SFC_SW_DWN,"#d6a21e");
- makeChart("humidityChart","Humidity (%)",weather.RH2M,"#318d9c");
-}
-
-// =============================================
-// CROP ADVISOR
-// =============================================
-
-const cropInfo={
- turmeric:{
-  name:"Turmeric",
-  recommendation:"Turmeric generally benefits from well-drained, fertile soil and steady moisture. Avoid waterlogging and use locally recommended varieties.",
-  tips:["Use well-drained soil and suitable organic matter.","Check soil moisture before irrigation.","Use mulch where appropriate.","Watch for drainage problems."]
- },
- paddy:{
-  name:"Paddy",
-  recommendation:"Paddy cultivation requires careful water management. Select varieties and planting schedules suitable for local conditions.",
-  tips:["Plan irrigation based on field conditions.","Maintain field channels and drainage.","Select locally suitable varieties.","Follow local fertilizer recommendations."]
- },
- sugarcane:{
-  name:"Sugarcane",
-  recommendation:"Sugarcane needs planned irrigation and good soil management. Choose varieties and planting practices recommended for your area.",
-  tips:["Use efficient irrigation where suitable.","Maintain soil organic matter.","Monitor crop growth during hot periods.","Plan water use across crop stages."]
- }
-};
-
-function updateCrop(){
- const crop=cropInfo[document.getElementById("crop").value];
- document.getElementById("cropName").textContent=
-  currentLanguage==="ta"
-   ? ({Turmeric:"மஞ்சள்",Paddy:"நெல்",Sugarcane:"கரும்பு"}[crop.name])
-   : crop.name;
- document.getElementById("recommendation").textContent=crop.recommendation;
-
- const list=document.getElementById("suggestions");
- list.innerHTML="";
- crop.tips.forEach(tip=>{
-  const li=document.createElement("li");
-  li.textContent=tip;
-  list.appendChild(li);
- });
-
- if(weatherData){
-  const rain=latestValue(weatherData.weather.PRECTOTCORR);
-  const temp=latestValue(weatherData.weather.T2M);
-  const humidity=latestValue(weatherData.weather.RH2M);
-
-  const extra=[];
-  if(rain && rain.value<1) extra.push("Latest daily rainfall is low. Check actual field moisture before deciding irrigation.");
-  if(temp && temp.value>=35) extra.push("Latest average temperature is high. Check crop water needs and local heat advisories.");
-  if(humidity && humidity.value>=80) extra.push("Humidity is high. Monitor crops for disease symptoms and follow local crop-protection advice.");
-
-  extra.forEach(text=>{
-   const li=document.createElement("li");
-   li.textContent=text;
-   list.appendChild(li);
+  map.on("click", function(event) {
+    setLocation(
+      "Selected map location",
+      event.latlng.lat,
+      event.latlng.lng
+    );
   });
- }
-}
 
-// =============================================
-// STARTUP
-// =============================================
+  // -----------------------------------------
+  // 3. NASA POWER API
+  // -----------------------------------------
 
-window.addEventListener("load",()=>{
- document.getElementById("region").value="erode";
- selectedRegion="erode";
- updateCrop();
- loadNASA();
- setTimeout(()=>map.invalidateSize(),400);
-});
+  function dateString(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}${month}${day}`;
+  }
+
+  function average(values) {
+    const valid = values.filter(v =>
+      Number.isFinite(v) && v !== -999
+    );
+
+    if (!valid.length) return null;
+
+    return valid.reduce((sum, value) => sum + value, 0) / valid.length;
+  }
+
+  function sum(values) {
+    const valid = values.filter(v =>
+      Number.isFinite(v) && v !== -999
+    );
+
+    if (!valid.length) return null;
+
+    return valid.reduce((total, value) => total + value, 0);
+  }
+
+  function getValues(data, parameter) {
+    const values = data?.properties?.parameter?.[parameter];
+
+    if (!values) return [];
+
+    return Object.entries(values)
+      .map(([date, value]) => ({
+        date,
+        value: Number(value)
+      }))
+      .filter(item =>
+        Number.isFinite(item.value) && item.value !== -999
+      )
+      .sort((a, b) => a.date.localeCompare(b.date));
+  }
+
+  async function loadNASAData() {
+    const status = document.getElementById("dataStatus");
+    status.textContent = "Loading NASA data...";
+    status.className = "status loading";
+
+    const days = Number(document.getElementById("periodSelect").value);
+
+    // POWER data are near-real-time, not instant weather observations.
+    // End the request several days before today to allow data processing.
+    const endDate = new Date();
+    endDate.setDate(endDate.getDate() - 5);
+
+    const startDate = new Date(endDate);
+    startDate.setDate(startDate.getDate() - days + 1);
+
+    const parameters = [
+      "T2M",
+      "T2M_MAX",
+      "T2M_MIN",
+      "PRECTOTCORR",
+      "RH2M",
+      "ALLSKY_SFC_SW_DWN"
+    ].join(",");
+
+    const url = new URL(
+      "https://power.larc.nasa.gov/api/temporal/daily/point"
+    );
+
+    url.search = new URLSearchParams({
+      parameters: parameters,
+      community: "AG",
+      longitude: currentLocation.lon,
+      latitude: currentLocation.lat,
+      start: dateString(startDate),
+      end: dateString(endDate),
+      format: "JSON",
+      "time-standard": "LST"
+    }).toString();
+
+    try {
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error("NASA POWER API returned HTTP " + response.status);
+      }
+
+      const data = await response.json();
+
+      if (!data?.properties?.parameter) {
+        throw new Error("NASA POWER response did not contain parameter data.");
+      }
+
+      latestData = data;
+      displayNASAData(data);
+
+      status.textContent = "NASA POWER data loaded";
+      status.className = "status";
+
+    } catch (error) {
+      console.error(error);
+
+      status.textContent = "Data unavailable";
+      status.className = "status error";
+
+      document.getElementById("dateRange").textContent =
+        "Could not load NASA POWER data. Check your internet connection " +
+        "and try again. Details: " + error.message;
+    }
+  }
+
+  // -----------------------------------------
+  // 4. DISPLAY NASA POWER VALUES
+  // -----------------------------------------
+
+  function displayNASAData(data) {
+    const temp = getValues(data, "T2M");
+    const maxTemp = getValues(data, "T2M_MAX");
+    const minTemp = getValues(data, "T2M_MIN");
+    const rain = getValues(data, "PRECTOTCORR");
+    const humidity = getValues(data, "RH2M");
+    const solar = getValues(data, "ALLSKY_SFC_SW_DWN");
+
+    function show(id, value, suffix, digits = 1) {
+      document.getElementById(id).textContent =
+        value === null || !Number.isFinite(value)
+          ? "N/A"
+          : value.toFixed(digits) + suffix;
+    }
+
+    show("avgTemp", average(temp.map(x => x.value)), " °C");
+    show("maxTemp", maxTemp.length
+      ? Math.max(...maxTemp.map(x => x.value)) : null, " °C");
+    show("minTemp", minTemp.length
+      ? Math.min(...minTemp.map(x => x.value)) : null, " °C");
+    show("rainfall", sum(rain.map(x => x.value)), " mm");
+    show("humidity", average(humidity.map(x => x.value)), " %");
+    show("solar", average(solar.map(x => x.value)), " MJ/m²", 2);
+
+    drawChart("tempChart", temp, "Temperature (°C)");
+    drawChart("rainChart", rain, "Rainfall (mm)");
+
+    const first = temp[0]?.date || rain[0]?.date;
+    const last = temp[temp.length - 1]?.date || rain[rain.length - 1]?.date;
+
+    document.getElementById("dateRange").textContent =
+      "Location: " + currentLocation.name +
+      " | Latitude: " + currentLocation.lat.toFixed(4) +
+      " | Longitude: " + currentLocation.lon.toFixed(4) +
+      " | Data period: " + (first || "N/A") + " to " + (last || "N/A");
+  }
+
+  // -----------------------------------------
+  // 5. SIMPLE CHART DRAWING
+  // -----------------------------------------
+
+  function drawChart(canvasId, items, label) {
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext("2d");
+
+    const width = canvas.clientWidth || 500;
+    const height = 230;
+    const ratio = window.devicePixelRatio || 1;
+
+    canvas.width = width * ratio;
+    canvas.height = height * ratio;
+    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+
+    ctx.clearRect(0, 0, width, height);
+
+    if (!items.length) {
+      ctx.fillStyle = "#718078";
+      ctx.font = "13px Arial";
+      ctx.fillText("No data available", 15, 35);
+      return;
+    }
+
+    const values = items.map(item => item.value);
+    const min = Math.min(0, ...values);
+    const max = Math.max(1, ...values);
+    const range = max - min || 1;
+
+    const left = 38;
+    const right = 12;
+    const top = 18;
+    const bottom = 35;
+    const chartWidth = width - left - right;
+    const chartHeight = height - top - bottom;
+
+    ctx.font = "10px Arial";
+    ctx.fillStyle = "#718078";
+    ctx.strokeStyle = "#e6ece7";
+    ctx.lineWidth = 1;
+
+    for (let i = 0; i <= 4; i++) {
+      const y = top + (chartHeight * i / 4);
+
+      ctx.beginPath();
+      ctx.moveTo(left, y);
+      ctx.lineTo(width - right, y);
+      ctx.stroke();
+
+      const val = max - (range * i / 4);
+      ctx.fillText(val.toFixed(1), 2, y + 3);
+    }
+
+    const step = chartWidth / Math.max(1, items.length - 1);
+
+    ctx.beginPath();
+    ctx.strokeStyle = "#238052";
+    ctx.lineWidth = 2.5;
+
+    items.forEach((item, index) => {
+      const x = left + index * step;
+      const y = top + chartHeight -
+        ((item.value - min) / range) * chartHeight;
+
+      if (index === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+
+    ctx.stroke();
+
+    ctx.fillStyle = "#176b45";
+
+    items.forEach((item, index) => {
+      const x = left + index * step;
+      const y = top + chartHeight -
+        ((item.value - min) / range) * chartHeight;
+
+      if (items.length <= 60 || index % 5 === 0) {
+        ctx.beginPath();
+        ctx.arc(x, y, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    });
+
+    ctx.fillStyle = "#718078";
+    ctx.font = "10px Arial";
+
+    const firstDate = items[0].date;
+    const lastDate = items[items.length - 1].date;
+
+    ctx.fillText(firstDate.slice(4, 6) + "/" + firstDate.slice(6), left, height - 10);
+    ctx.fillText(
+      lastDate.slice(4, 6) + "/" + lastDate.slice(6),
+      width - 48,
+      height - 10
+    );
+  }
+
+  // -----------------------------------------
+  // 6. LOCATION SEARCH
+  // -----------------------------------------
+
+  async function searchPlace() {
+    const query = document.getElementById("placeSearch").value.trim();
+
+    if (!query) {
+      alert("Please enter a place name.");
+      return;
+    }
+
+    const button = document.getElementById("searchBtn");
+    button.disabled = true;
+    button.textContent = "Searching...";
+
+    try {
+      const url =
+        "https://geocoding-api.open-meteo.com/v1/search?name=" +
+        encodeURIComponent(query) +
+        "&count=1&language=en&format=json";
+
+      const response = await fetch(url);
+
+      if (!response.ok) throw new Error("Location search failed.");
+
+      const result = await response.json();
+
+      if (!result.results || !result.results.length) {
+        alert("Location not found. Try another place name.");
+        return;
+      }
+
+      const place = result.results[0];
+
+      const name = [
+        place.name,
+        place.admin1,
+        place.country
+      ].filter(Boolean).join(", ");
+
+      setLocation(name, place.latitude, place.longitude);
+
+    } catch (error) {
+      alert("Could not search for this location. Please try again.");
+      console.error(error);
+    } finally {
+      button.disabled = false;
+      button.textContent = "Search";
+    }
+  }
+
+  document.getElementById("placeSearch").addEventListener("keydown", event => {
+    if (event.key === "Enter") searchPlace();
+  });
+
+  function setLocation(name, lat, lon) {
+    currentLocation = { name, lat, lon };
+
+    map.setView([lat, lon], 10);
+    marker.setLatLng([lat, lon]);
+    marker.bindPopup(name).openPopup();
+
+    document.getElementById("locationInfo").textContent =
+      "Selected: " + name +
+      " | Latitude: " + lat.toFixed(4) +
+      " | Longitude: " + lon.toFixed(4);
+
+    loadNASAData();
+  }
+
+  function resetLocation() {
+    document.getElementById("placeSearch").value = "";
+
+    setLocation(
+      "Erode, Tamil Nadu, India",
+      11.3410,
+      77.7172
+    );
+  }
+
+  // -----------------------------------------
+  // 7. CROP SELECTOR
+  // -----------------------------------------
+
+  document.getElementById("cropSelect").addEventListener("change", event => {
+    document.getElementById("selectedCropDisplay").value = event.target.value;
+  });
+
+  document.getElementById("periodSelect").addEventListener("change", () => {
+    loadNASAData();
+  });
+
+  // -----------------------------------------
+  // 8. ENGLISH / TAMIL LANGUAGE SWITCH
+  // -----------------------------------------
+
+  let currentLanguage = "en";
+
+  const translations = {
+    en: {
+      subtitle: "Farm Climate Advisor",
+      welcomeTitle: "Understand Your Farm's Climate",
+      welcomeText: "Explore NASA Earth observation data and compare climate conditions to support more informed farm decisions.",
+      locationTitle: "📍 Select Farm Location",
+      searchBtn: "Search",
+      resetBtn: "Default",
+      cropLabel: "Select Crop",
+      periodLabel: "Data period",
+      climateTitle: "🛰️ NASA POWER Climate Dashboard",
+      avgTempLabel: "Average Temperature",
+      maxTempLabel: "Maximum Temperature",
+      minTempLabel: "Minimum Temperature",
+      rainLabel: "Total Rainfall",
+      humidityLabel: "Average Humidity",
+      solarLabel: "Solar Radiation",
+      chartsTitle: "📊 Historical Climate Trends",
+      tempChartTitle: "Daily Temperature",
+      rainChartTitle: "Daily Rainfall",
+      mapTitle: "🗺️ Interactive Farm Location Map",
+      rotationTitle: "🌾 Crop Rotation Strategy Comparison",
+      resourcesTitle: "🛰️ Earth Observation & Agriculture Resources",
+      aboutTitle: "ℹ️ About the NASA Data"
+    },
+    ta: {
+      subtitle: "விவசாய காலநிலை ஆலோசகர்",
+      welcomeTitle: "உங்கள் பண்ணையின் காலநிலையை அறிந்து கொள்ளுங்கள்",
+      welcomeText: "NASA பூமி கண்காணிப்புத் தரவுகளைப் பயன்படுத்தி காலநிலை நிலைகளைப் புரிந்து கொள்ளுங்கள்.",
+      locationTitle: "📍 பண்ணை இடத்தைத் தேர்ந்தெடுக்கவும்",
+      searchBtn: "தேடுக",
+      resetBtn: "இயல்புநிலை",
+      cropLabel: "பயிரைத் தேர்ந்தெடுக்கவும்",
+      periodLabel: "தரவு காலம்",
+      climateTitle: "🛰️ NASA POWER காலநிலை தகவல்",
+      avgTempLabel: "சராசரி வெப்பநிலை",
+      maxTempLabel: "அதிகபட்ச வெப்பநிலை",
+      minTempLabel: "குறைந்தபட்ச வெப்பநிலை",
+      rainLabel: "மொத்த மழைப்பொழிவு",
+      humidityLabel: "சராசரி ஈரப்பதம்",
+      solarLabel: "சூரிய கதிர்வீச்சு",
+      chartsTitle: "📊 கடந்த கால காலநிலை மாற்றங்கள்",
+      tempChartTitle: "தினசரி வெப்பநிலை",
+      rainChartTitle: "தினசரி மழைப்பொழிவு",
+      mapTitle: "🗺️ பண்ணை இட வரைபடம்",
+      rotationTitle: "🌾 பயிர் சுழற்சி உத்திகள்",
+      resourcesTitle: "🛰️ பூமி கண்காணிப்பு மற்றும் விவசாயத் தரவுகள்",
+      aboutTitle: "ℹ️ NASA தரவுகள் பற்றி"
+    }
+  };
+
+  function toggleLanguage() {
+    currentLanguage = currentLanguage === "en" ? "ta" : "en";
+
+    const words = translations[currentLanguage];
+
+    Object.keys(words).forEach(id => {
+      const element = document.getElementById(id);
+      if (element) element.textContent = words[id];
+    });
+
+    document.getElementById("languageBtn").textContent =
+      currentLanguage === "en" ? "தமிழ்" : "English";
+  }
+
+  // -----------------------------------------
+  // 9. INITIAL PAGE LOAD
+  // -----------------------------------------
+
+  document.getElementById("selectedCropDisplay").value =
+    document.getElementById("cropSelect").value;
+
+  loadNASAData();
+
+  // Redraw charts if the browser window changes size.
+  window.addEventListener("resize", () => {
+    if (latestData) displayNASAData(latestData);
+  });
 </script>
+
 </body>
 </html>
